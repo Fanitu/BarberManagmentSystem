@@ -1,0 +1,101 @@
+.section {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 28px 20px 60px;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 700;
+  margin: 0 0 18px;
+  color: var(--ink);
+}
+
+.subtabs {
+  display: inline-flex;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.subtab {
+  background: var(--paper-raised);
+  border: none;
+  padding: 8px 18px;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--ink-soft);
+  border-right: 1px solid var(--line);
+}
+
+.subtab:last-child {
+  border-right: none;
+}
+
+.active {
+  background: var(--navy);
+  color: var(--paper-raised);
+}
+
+.hint {
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+}
+
+.error {
+  font-size: var(--text-sm);
+  color: var(--debt-red);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+}
+
+.card {
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: var(--shadow-card);
+}
+
+.highlight {
+  border-color: var(--navy);
+  border-width: 1.5px;
+}
+
+.cardLabel {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-soft);
+  font-weight: 700;
+}
+
+.cardValue {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.positive {
+  color: var(--register-green);
+}
+
+.negative {
+  color: var(--debt-red);
+}
+
+.list { display: flex; flex-direction: column; gap: 24px; }
+.entry { padding: 20px;  border: 2px solid black; border-radius: var(--radius); }
+.entry:last-of-type { border-bottom: none; }
+.entryLabel { font-family: var(--font-mono); font-size: var(--text-sm); font-weight: 600; letter-spacing: 0.02em; color: var(--brass); margin: 0 0 12px; }
+.loadMoreBtn { align-self: center; margin-top: 4px; padding: 10px 22px; font-size: var(--text-sm); font-weight: 600; color: var(--ink); background: var(--paper-raised); border: 1px solid var(--line); border-radius: var(--radius); }
+.loadMoreBtn:hover { border-color: var(--navy); }

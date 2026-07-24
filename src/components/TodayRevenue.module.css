@@ -1,0 +1,144 @@
+.section {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 32px 20px calc(var(--total-bar-height) + 40px);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 700;
+  margin: 0 0 20px;
+  color: var(--ink);
+}
+
+.block {
+  margin-bottom: 24px;
+}
+
+.blockTitle {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-soft);
+  margin: 0 0 8px;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+  font-size: var(--text-sm);
+  border-bottom: 1px dashed var(--line);
+}
+
+.row:last-child {
+  border-bottom: none;
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.amount {
+  color: var(--register-green);
+  font-weight: 600;
+}
+
+.amountDebt {
+  color: var(--debt-red);
+  font-weight: 600;
+}
+
+.hint {
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+}
+
+.error {
+  font-size: var(--text-sm);
+  color: var(--debt-red);
+}
+
+/* --- Signature element: a torn-receipt total bar fixed to the bottom --- */
+.totalBar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--total-bar-height);
+  display: flex;
+  align-items: center;
+  background: var(--ink);
+  color: var(--paper-raised);
+  z-index: 30;
+  padding: 10px 20px 0;
+}
+
+.totalBar::before {
+  content: "";
+  position: absolute;
+  top: -9px;
+  left: 0;
+  right: 0;
+  height: 9px;
+  background-image: linear-gradient(135deg, var(--ink) 50%, transparent 50%),
+    linear-gradient(45deg, var(--ink) 50%, transparent 50%);
+  background-size: 16px 16px;
+  background-position: bottom left;
+  background-repeat: repeat-x;
+}
+
+.totalItem {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+}
+
+.totalDivider {
+  width: 1px;
+  align-self: stretch;
+  margin: 4px 0;
+  background: rgba(246, 241, 231, 0.2);
+}
+
+.totalLabel {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(246, 241, 231, 0.65);
+}
+
+.totalValue {
+  font-size: var(--text-lg);
+  font-weight: 600;
+}
+
+.revenueValue {
+  color: #7fd9a8;
+}
+
+.debtValue {
+  color: #e59484;
+}
+
+@media (max-width: 380px) {
+  .totalValue {
+    font-size: var(--text-base);
+  }
+}

@@ -1,0 +1,97 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(31, 42, 36, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 20px;
+}
+
+.modal {
+  width: 100%;
+  max-width: 340px;
+  background: var(--paper-raised);
+  border-radius: var(--radius);
+  box-shadow: 0 20px 50px rgba(31, 42, 36, 0.25);
+  padding: 28px 24px 24px;
+  position: relative;
+}
+
+/* A dashed "tear line" near the top, echoing perforated receipt paper */
+.perforation {
+  position: absolute;
+  top: 14px;
+  left: 24px;
+  right: 24px;
+  height: 0;
+  border-top: 1.5px dashed var(--line);
+}
+
+.modalTitle {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  margin: 16px 0 20px;
+  color: var(--ink);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+.input {
+  font-size: var(--text-base);
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.input:focus {
+  border-color: var(--brass);
+}
+
+.codeInput {
+  font-family: var(--font-mono);
+  letter-spacing: 0.05em;
+}
+
+.error {
+  margin: -6px 0 0;
+  font-size: var(--text-sm);
+  color: var(--debt-red);
+}
+
+.submitBtn {
+  margin-top: 4px;
+  padding: 12px;
+  font-weight: 600;
+  font-size: var(--text-base);
+  background: var(--register-green);
+  color: var(--paper-raised);
+  border: none;
+  border-radius: var(--radius);
+}
+
+.submitBtn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.submitBtn:not(:disabled):hover {
+  opacity: 0.9;
+}

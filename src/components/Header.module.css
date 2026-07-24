@@ -1,0 +1,56 @@
+.header {
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  background: var(--paper-raised);
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--text-lg);
+  letter-spacing: -0.01em;
+  margin: 0;
+  color: var(--ink);
+}
+
+.authArea {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.userName {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+}
+
+.loginBtn,
+.logoutBtn {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: var(--text-sm);
+  padding: 8px 8px;
+  border-radius: var(--radius);
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  color: var(--paper-raised);
+  transition: opacity 0.15s ease;
+}
+
+.logoutBtn {
+  background: transparent;
+  color: var(--ink);
+}
+
+.loginBtn:hover,
+.logoutBtn:hover {
+  opacity: 0.75;
+}
