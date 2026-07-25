@@ -59,6 +59,8 @@
   margin: 0;
   font-size: var(--text-sm);
   color: var(--register-green);
+  background: var(--paper-raised);
+  border-radius: var(--radius);
 }
 
 .submitBtn {

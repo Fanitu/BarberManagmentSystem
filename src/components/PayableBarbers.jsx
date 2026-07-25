@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { listPayableBarbersToday, payBarberNow } from "../api/payouts";
+import PaySuccessModal from "./PaySuccessModal";
 import styles from "./PayableBarbers.module.css";
 
 const formatMoney = (n) => (n ?? 0).toLocaleString(undefined, { maximumFractionDigits: 2 });
@@ -11,6 +12,7 @@ const PayableBarbers = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [payingId, setPayingId] = useState(null);
+  const [successPayout, setSuccessPayout] = useState(null);
 
   const load = () => {
     setLoading(true);
@@ -26,7 +28,9 @@ const PayableBarbers = () => {
   const handlePay = async (barberId) => {
     setPayingId(barberId);
     try {
-      await payBarberNow(token, barberId);
+      const result = await payBarberNow(token, barberId);
+      setSuccessPayout(result);
+      console.log("Payment successful:", result);
       load();
     } catch (err) {
       setError(err.message);
@@ -48,7 +52,7 @@ const PayableBarbers = () => {
       )}
 
       <div className={styles.list}>
-        {payouts.map(({ barber, totalServicesIncome, debtAmount, finalIncome }) => (
+        {payouts.map(({ barber,totalServicesGross, totalServicesIncome, debtAmount, finalIncome }) => (
           <div key={barber.id} className={styles.card}>
             <div className={styles.cardHeader}>
               <span className={styles.barberName}>{barber.name}</span>
@@ -63,7 +67,11 @@ const PayableBarbers = () => {
 
             <div className={styles.rows}>
               <div className={styles.row}>
-                <span>Total Services Income</span>
+                <span>Total Services Gross</span>
+                <span className="mono-figure">{formatMoney(totalServicesGross)}</span>
+              </div>
+              <div className={styles.row}>
+                <span>Total Barber Income</span>
                 <span className="mono-figure">{formatMoney(totalServicesIncome)}</span>
               </div>
               {debtAmount > 0 && (
@@ -82,6 +90,10 @@ const PayableBarbers = () => {
           </div>
         ))}
       </div>
+
+      {successPayout && (
+        <PaySuccessModal payout={successPayout} onClose={() => setSuccessPayout(null)} />
+      )}
     </section>
   );
 };

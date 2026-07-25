@@ -55,6 +55,12 @@ const ServiceForm = () => {
     <section className={styles.section}>
       <h2 className={styles.title}>Service</h2>
 
+       {status.message && (
+          <p className={status.type === "error" ? styles.error : styles.success}>
+            {status.message}
+          </p>
+        )}
+
       <form onSubmit={handleSubmit} className={styles.form}>
         <label className={styles.label}>
           Barber
@@ -106,13 +112,6 @@ const ServiceForm = () => {
             required
           />
         </label>
-
-        {status.message && (
-          <p className={status.type === "error" ? styles.error : styles.success}>
-            {status.message}
-          </p>
-        )}
-
         <button className={styles.submitBtn} type="submit" disabled={submitting}>
           {submitting ? "Submitting…" : "Submit Service"}
         </button>

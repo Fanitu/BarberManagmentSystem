@@ -66,6 +66,7 @@ const RevenueView = () => {
     setError("");
     getRevenueHistory(token, period, limit)
       .then((data) => {
+        console.log("Revenue data:", data.entries);
         setEntries(data.entries);
         setReachedEnd(data.reachedEnd);
       })
@@ -139,7 +140,7 @@ const RevenueView = () => {
                 {period === "monthly" && (
                   <div className={`${styles.card} ${styles.highlight}`}>
                     <span className={styles.cardLabel}>Profit</span>
-                    <span className={`${styles.cardValue} ${styles.positive} mono-figure`}>
+                    <span className={entry.profit >= 0 ? `${styles.cardValue} ${styles.positive} mono-figure` : `${styles.cardValue} ${styles.negative} mono-figure`}>
                       {formatMoney(entry.profit)}
                     </span>
                   </div>
