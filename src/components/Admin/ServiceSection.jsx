@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 import {
   listServices,
   createService,
   updateService,
   deleteService,
-} from "../api/services";
+} from "../../api/services";
 import styles from "./ListSection.module.css";
 
 const formatMoney = (n) => n.toLocaleString(undefined, { maximumFractionDigits: 2 });
@@ -16,7 +16,7 @@ const ServiceSection = () => {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [shopPercent, setShopPercent] = useState("");
-  const [error, setError] = useState("");
+  const [status, setStatus] = useState({ type: "", message: "" });
   const [submitting, setSubmitting] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [editName, setEditName] = useState("");
@@ -24,27 +24,34 @@ const ServiceSection = () => {
   const [editShopPercent, setEditShopPercent] = useState("");
 
   const load = () => {
-    listServices(token).then(setItems).catch((err) => setError(err.message));
+    listServices(token).then(setItems).catch((err) => setStatus({ type: "error", message: err.message }));
   };
 
   useEffect(load, [token]);
 
+  useEffect(() => {
+    if (!status.message) return;
+    const timer = setTimeout(() => setStatus({ type: "", message: "" }), 3500);
+    return () => clearTimeout(timer);
+  }, [status.message, status.type]);
+
   const handleCreate = async (e) => {
     e.preventDefault();
     setSubmitting(true);
-    setError("");
+    setStatus({ type: "", message: "" })
     try {
       await createService(token, {
         name,
         price: Number(price),
         shopPercent: Number(shopPercent),
       });
+      setStatus({ type: "success", message: "Service Created Successfully." });
       setName("");
       setPrice("");
       setShopPercent("");
       load();
     } catch (err) {
-      setError(err.message);
+      setStatus({ type: "error", message: err.message });
     } finally {
       setSubmitting(false);
     }
@@ -60,25 +67,29 @@ const ServiceSection = () => {
   const cancelEdit = () => setEditingId(null);
 
   const saveEdit = async (id) => {
+    setStatus({ type: "", message: "" })
     try {
       await updateService(token, id, {
         name: editName,
         price: Number(editPrice),
         shopPercent: Number(editShopPercent),
       });
+      setStatus({ type: "success", message: "Service Created Successfully." });
       setEditingId(null);
       load();
     } catch (err) {
-      setError(err.message);
+      setStatus({ type: "error", message: err.message });
     }
   };
 
   const handleDelete = async (id) => {
+    setStatus({ type: "", message: "" })
     try {
       await deleteService(token, id);
+      setStatus({ type: "success", message: "Service Deleted Successfully." });
       load();
     } catch (err) {
-      setError(err.message);
+      setStatus({ type: "error", message: err.message });
     }
   };
 
@@ -121,7 +132,6 @@ const ServiceSection = () => {
             required
           />
         </label>
-        {error && <p className={styles.error}>{error}</p>}
         <button className={styles.submitBtn} type="submit" disabled={submitting}>
           {submitting ? "Saving…" : "Save Service"}
         </button>
@@ -180,6 +190,17 @@ const ServiceSection = () => {
         )}
         {items.length === 0 && <li className={styles.empty}>No services yet.</li>}
       </ul>
+
+      {status.message && (
+          <div
+            key={status.message}
+            className={`${styles.toast} ${
+                status.type === "error" ? styles.toastError : styles.toastSuccess
+              }`}
+            >
+              {status.message}
+            </div>
+        )}
     </section>
   );
 };

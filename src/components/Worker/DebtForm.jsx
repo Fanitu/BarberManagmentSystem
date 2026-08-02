@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "../context/AuthContext";
-import { listBarbers } from "../api/barbers";
-import { createDebt } from "../api/debts";
+import { useAuth } from "../../context/AuthContext";
+import { listBarbers } from "../../api/barbers";
+import { createDebt } from "../../api/debts";
 import styles from "./DebtForm.module.css";
 
 const DebtForm = () => {
@@ -18,13 +18,19 @@ const DebtForm = () => {
       .catch((err) => setStatus({ type: "error", message: err.message }));
   }, [token]);
 
+  useEffect(() => {
+    if (!status.message) return;
+    const timer = setTimeout(() => setStatus({ type: "", message: "" }), 3500);
+    return () => clearTimeout(timer);
+  }, [status.message, status.type]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
     setStatus({ type: "", message: "" });
     try {
       await createDebt(token, { barberId, amount: Number(amount) });
-      setStatus({ type: "success", message: "Debt submitted." });
+      setStatus({ type: "success", message: "Debt submitted successfully." });
       setBarberId("");
       setAmount("");
     } catch (err) {
@@ -70,17 +76,21 @@ const DebtForm = () => {
             required
           />
         </label>
-
-        {status.message && (
-          <p className={status.type === "error" ? styles.error : styles.success}>
-            {status.message}
-          </p>
-        )}
-
         <button className={styles.submitBtn} type="submit" disabled={submitting}>
           {submitting ? "Submitting…" : "Submit Debt"}
         </button>
       </form>
+
+      {status.message && (
+        <div
+          key={status.message}
+          className={`${styles.toast} ${
+              status.type === "error" ? styles.toastError : styles.toastSuccess
+            }`}
+          >
+            {status.message}
+          </div>
+      )}
     </section>
   );
 };

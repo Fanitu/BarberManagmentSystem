@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 import {
   listMonthlyExpenses,
   createMonthlyExpense,
   updateMonthlyExpense,
   deleteMonthlyExpense,
-} from "../api/monthlyExpenses";
+} from "../../api/monthlyExpenses";
 import styles from "./ListSection.module.css";
 
 const formatMoney = (n) => n.toLocaleString(undefined, { maximumFractionDigits: 2 });
@@ -15,29 +15,37 @@ const MonthlyExpenseSection = () => {
   const [items, setItems] = useState([]);
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
-  const [error, setError] = useState("");
+  const [status, setStatus] = useState({ type: "", message: "" });
   const [submitting, setSubmitting] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [editName, setEditName] = useState("");
   const [editPrice, setEditPrice] = useState("");
 
   const load = () => {
-    listMonthlyExpenses(token).then(setItems).catch((err) => setError(err.message));
+    listMonthlyExpenses(token).then(setItems).catch((err) => setStatus({ type: "error", message: err.message }));
   };
 
   useEffect(load, [token]);
 
+  useEffect(() => {
+    if (!status.message) return;
+    const timer = setTimeout(() => setStatus({ type: "", message: "" }), 3500);
+    return () => clearTimeout(timer);
+  }, [status.message, status.type]);
+
+
   const handleCreate = async (e) => {
     e.preventDefault();
     setSubmitting(true);
-    setError("");
+    setStatus({ type: "", message: "" });
     try {
       await createMonthlyExpense(token, { name, price: Number(price) });
+      setStatus({ type: "success", message: "Monthly Expense submitted Successfully." });
       setName("");
       setPrice("");
       load();
     } catch (err) {
-      setError(err.message);
+      setStatus({ type: "error", message: err.message });
     } finally {
       setSubmitting(false);
     }
@@ -52,21 +60,25 @@ const MonthlyExpenseSection = () => {
   const cancelEdit = () => setEditingId(null);
 
   const saveEdit = async (id) => {
+    setStatus({ type: "", message: "" });
     try {
       await updateMonthlyExpense(token, id, { name: editName, price: Number(editPrice) });
+      setStatus({ type: "success", message: "Monthly Expense Edited Successfully." });
       setEditingId(null);
       load();
     } catch (err) {
-      setError(err.message);
+      setStatus({ type: "error", message: err.message });
     }
   };
 
   const handleDelete = async (id) => {
+    setStatus({ type: "", message: "" });
     try {
       await deleteMonthlyExpense(token, id);
+      setStatus({ type: "success", message: "Monthly Expense Deleted Successfully." });
       load();
     } catch (err) {
-      setError(err.message);
+      setStatus({ type: "error", message: err.message });
     }
   };
 
@@ -97,7 +109,6 @@ const MonthlyExpenseSection = () => {
             required
           />
         </label>
-        {error && <p className={styles.error}>{error}</p>}
         <button className={styles.submitBtn} type="submit" disabled={submitting}>
           {submitting ? "Saving…" : "Save Monthly expense"}
         </button>
@@ -149,6 +160,17 @@ const MonthlyExpenseSection = () => {
         )}
         {items.length === 0 && <li className={styles.empty}>No monthly expenses yet.</li>}
       </ul>
+
+      {status.message && (
+        <div
+          key={status.message}
+          className={`${styles.toast} ${
+              status.type === "error" ? styles.toastError : styles.toastSuccess
+            }`}
+          >
+            {status.message}
+          </div>
+      )}
     </section>
   );
 };

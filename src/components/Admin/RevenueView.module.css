@@ -18,9 +18,11 @@
   border-radius: var(--radius);
   overflow: hidden;
   margin-bottom: 24px;
+  width: 100%;
 }
 
 .subtab {
+  flex: 1;
   background: var(--paper-raised);
   border: none;
   padding: 8px 18px;
@@ -28,9 +30,12 @@
   font-weight: 600;
   color: var(--ink-soft);
   border-right: 1px solid var(--line);
+  margin-right: 12px;
 }
 
 .subtab:last-child {
+  
+  margin-right: 0px;
   border-right: none;
 }
 
@@ -39,9 +44,33 @@
   color: var(--paper-raised);
 }
 
-.hint {
-  font-size: var(--text-sm);
-  color: var(--ink-soft);
+.loadingWrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 24px 0;
+}
+
+.spinner {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  border: 2.5px solid var(--line);
+  border-top-color: var(--navy);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation-duration: 1.6s;
+  }
 }
 
 .error {
@@ -99,3 +128,72 @@
 .entryLabel { font-family: var(--font-mono); font-size: var(--text-sm); font-weight: 600; letter-spacing: 0.02em; color: var(--brass); margin: 0 0 12px; }
 .loadMoreBtn { align-self: center; margin-top: 4px; padding: 10px 22px; font-size: var(--text-sm); font-weight: 600; color: var(--ink); background: var(--paper-raised); border: 1px solid var(--line); border-radius: var(--radius); }
 .loadMoreBtn:hover { border-color: var(--navy); }
+
+
+
+
+/* This is the details css */
+
+.detailBtn {
+  margin-top: 14px;
+  padding: 8px 16px;
+  font-size: var(--text-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--navy);
+  background: var(--navy-dim);
+  border: 1px solid var(--navy);
+  border-radius: var(--radius);
+}
+
+.detailBtn:hover {
+  opacity: 0.85;
+}
+
+.detailPanel {
+  margin-top: 14px;
+  padding: 16px;
+  background: var(--paper);
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+}
+
+.detailBlock {
+  margin-bottom: 14px;
+}
+
+.detailBlock:last-child {
+  margin-bottom: 0;
+}
+
+.detailHeading {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-soft);
+  margin: 0 0 8px;
+}
+
+.detailList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.detailRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  font-size: var(--text-sm);
+  border-bottom: 1px dashed var(--line);
+}
+
+.detailRow:last-child {
+  border-bottom: none;
+}

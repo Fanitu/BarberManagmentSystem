@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "./context/AuthContext";
-import Header from "./components/Header";
-import LoginModal from "./components/LoginModal";
-import NavBar from "./components/NavBar";
-import Sidebar from "./components/Sidebar";
-import ServiceForm from "./components/ServiceForm";
-import DebtForm from "./components/DebtForm";
-import TodayRevenue from "./components/TodayRevenue";
-import RevenueView from "./components/RevenueView";
-import PayableBarbers from "./components/PayableBarbers";
-import RunningCostForm from "./components/RunningCostForm";
-import MonthlyExpenseSection from "./components/MonthlyExpenseSection";
-import ServiceSection from "./components/ServiceSection";
-import BarbersListSection from "./components/BarbersListSection";
+import Header from "./components/Shared/Header";
+import LoginModal from "./components/Shared/LoginModal";
+import NavBar from "./components/Shared/NavBar";
+import Sidebar from "./components/Admin/Sidebar";
+import ServiceForm from "./components/Worker/ServiceForm";
+import DebtForm from "./components/Worker/DebtForm";
+import TodayRevenue from "./components/Worker/TodayRevenue";
+import RevenueView from "./components/Admin/RevenueView";
+import PayableBarbers from "./components/Admin/PayableBarbers";
+import RunningCostForm from "./components/Admin/RunningCostForm";
+import MonthlyExpenseSection from "./components/Admin/MonthlyExpenseSection";
+import ServiceSection from "./components/Admin/ServiceSection";
+import BarbersListSection from "./components/Admin/BarbersListSection";
 import "./App.css";
 
 const ADMIN_NAV_VIEWS = ["revenue", "payable-barbers", "running-cost"];
@@ -51,6 +51,7 @@ function App() {
       setModalOpen(false);
     }
   };
+
 
   const closeModal = () => {
     setModalOpen(false);
@@ -108,6 +109,9 @@ function App() {
       ) : (
         <main className="empty-state">
           <p>Log in with your name, password, and shop's barber code to get started.</p>
+          <button className="loginBtn" onClick={() => setModalOpen(true)}>
+            Log in
+          </button>
         </main>
       )}
 

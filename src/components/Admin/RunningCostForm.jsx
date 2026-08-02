@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "../context/AuthContext";
-import { listRunningCosts, createRunningCost } from "../api/runningCosts";
+import { useAuth } from "../../context/AuthContext";
+import { listRunningCosts, createRunningCost } from "../../api/runningCosts";
 import styles from "./RunningCostForm.module.css";
 
 const formatMoney = (n) => n.toLocaleString(undefined, { maximumFractionDigits: 2 });
@@ -18,6 +18,12 @@ const RunningCostForm = () => {
       .then(setCosts)
       .catch((err) => setStatus({ type: "error", message: err.message }));
   };
+
+  useEffect(() => {
+    if (!status.message) return;
+    const timer = setTimeout(() => setStatus({ type: "", message: "" }), 3500);
+    return () => clearTimeout(timer);
+  }, [status.message, status.type]);
 
   useEffect(load, [token]);
 
@@ -67,12 +73,6 @@ const RunningCostForm = () => {
           />
         </label>
 
-        {status.message && (
-          <p className={status.type === "error" ? styles.error : styles.success}>
-            {status.message}
-          </p>
-        )}
-
         <button className={styles.submitBtn} type="submit" disabled={submitting}>
           {submitting ? "Submitting…" : "Submit Running-cost"}
         </button>
@@ -88,6 +88,18 @@ const RunningCostForm = () => {
           ))}
         </ul>
       )}
+
+
+       {status.message && (
+       <div
+         key={status.message}
+         className={`${styles.toast} ${
+              status.type === "error" ? styles.toastError : styles.toastSuccess
+            }`}
+          >
+            {status.message}
+          </div>
+        )}
     </section>
   );
 };

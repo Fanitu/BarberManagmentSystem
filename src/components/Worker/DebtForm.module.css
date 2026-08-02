@@ -49,26 +49,41 @@
   font-family: var(--font-mono);
 }
 
-.error {
-  margin: 0;
-  font-size: var(--text-sm);
-  color: var(--debt-red);
-}
 
-.success {
-  margin: 0;
-  font-size: var(--text-sm);
-  color: var(--register-green);
-  background: var(--paper-raised);
-  border-radius: var(--radius);
-}
+
+ @keyframes toastLifecycle {
+   0%   { opacity: 0; transform: translate(-50%, 10px); }
+   8%   { opacity: 1; transform: translate(-50%, 0); }
+   85%  { opacity: 1; transform: translate(-50%, 0); }
+   100% { opacity: 0; transform: translate(-50%, 10px); }
+ }
+
+ .toast {
+   position: fixed;
+   left: 50%;
+   bottom: 110px;
+   transform: translate(-50%, 0);
+   z-index: 200;
+   max-width: 90vw;
+   padding: 12px 22px;
+   border-radius: var(--radius);
+   font-size: var(--text-sm);
+   font-weight: 600;
+   text-align: center;
+   box-shadow: 0 8px 24px rgba(31, 42, 36, 0.25);
+   animation: toastLifecycle 3.5s ease forwards;
+   pointer-events: none;
+ }
+
+ .toastSuccess { background: var(--register-green); color: var(--paper-raised); }
+ .toastError   { background: var(--debt-red); color: var(--paper-raised); }
 
 .submitBtn {
   margin-top: 4px;
   padding: 12px;
   font-weight: 600;
   font-size: var(--text-base);
-  background: var(--register-green);
+  background: var(--debt-red);
   color: var(--paper-raised);
   border: none;
   border-radius: var(--radius);

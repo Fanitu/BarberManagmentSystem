@@ -20,5 +20,12 @@ export const submitServiceLog = (token, { barberId, serviceId, price }) =>
     body: { barberId, serviceId, price },
   });
 
+export const updateServiceLog = (token, id, { barberId, serviceId, price }) =>
+  request(`/services/log/${id}`, {
+    method: "PUT",
+    token,
+    body: { barberId, serviceId, price },
+  });
+
 export const listTodayServiceLogs = (token) =>
   request("/services/log/today", { token });

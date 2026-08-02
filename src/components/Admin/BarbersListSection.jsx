@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "../context/AuthContext";
-import { listBarbers, createBarber, deleteBarber } from "../api/barbers";
+import { useAuth } from "../../context/AuthContext";
+import { listBarbers, createBarber, deleteBarber } from "../../api/barbers";
 import styles from "./ListSection.module.css";
 
 const WEEKDAYS = [
@@ -19,27 +19,34 @@ const BarbersListSection = () => {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [paymentDay, setPaymentDay] = useState("0");
-  const [error, setError] = useState("");
+  const [status, setStatus] = useState({ type: "", message: "" });
   const [submitting, setSubmitting] = useState(false);
 
   const load = () => {
-    listBarbers(token).then(setItems).catch((err) => setError(err.message));
+    listBarbers(token).then(setItems).catch((err) => setStatus({ type: "error", message: err.message }));
   };
 
   useEffect(load, [token]);
 
+   useEffect(() => {
+    if (!status.message) return;
+    const timer = setTimeout(() => setStatus({ type: "", message: "" }), 3500);
+    return () => clearTimeout(timer);
+  }, [status.message, status.type]);
+
   const handleCreate = async (e) => {
     e.preventDefault();
     setSubmitting(true);
-    setError("");
+    setStatus({ type: "", message: "" });
     try {
       await createBarber(token, { name, phone, paymentDay: Number(paymentDay) });
+      setStatus({ type: "success", message: "Barber Created Successfully." });
       setName("");
       setPhone("");
       setPaymentDay("0");
       load();
     } catch (err) {
-      setError(err.message);
+      setStatus({ type: "error", message: err.message });
     } finally {
       setSubmitting(false);
     }
@@ -48,9 +55,10 @@ const BarbersListSection = () => {
   const handleDelete = async (id) => {
     try {
       await deleteBarber(token, id);
+      setStatus({ type: "success", message: "Barber Deleted Successfully." });
       load();
     } catch (err) {
-      setError(err.message);
+      setStatus({ type: "error", message: err.message });
     }
   };
 
@@ -92,7 +100,7 @@ const BarbersListSection = () => {
             ))}
           </select>
         </label>
-        {error && <p className={styles.error}>{error}</p>}
+        
         <button className={styles.submitBtn} type="submit" disabled={submitting}>
           {submitting ? "Saving…" : "Save Barber"}
         </button>
@@ -115,6 +123,17 @@ const BarbersListSection = () => {
         ))}
         {items.length === 0 && <li className={styles.empty}>No barbers yet.</li>}
       </ul>
+
+      {status.message && (
+             <div
+               key={status.message}
+               className={`${styles.toast} ${
+                    status.type === "error" ? styles.toastError : styles.toastSuccess
+                  }`}
+                >
+                  {status.message}
+                </div>
+              )}
     </section>
   );
 };

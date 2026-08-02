@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "../context/AuthContext";
-import { listPayableBarbersToday, payBarberNow } from "../api/payouts";
+import { useAuth } from "../../context/AuthContext";
+import { listPayableBarbersToday, payBarberNow } from "../../api/payouts";
 import PaySuccessModal from "./PaySuccessModal";
 import styles from "./PayableBarbers.module.css";
 
@@ -9,17 +9,17 @@ const formatMoney = (n) => (n ?? 0).toLocaleString(undefined, { maximumFractionD
 const PayableBarbers = () => {
   const { token } = useAuth();
   const [payouts, setPayouts] = useState([]);
-  const [error, setError] = useState("");
+  const [status, setStatus] = useState({ type: "", message: "" });
   const [loading, setLoading] = useState(true);
   const [payingId, setPayingId] = useState(null);
   const [successPayout, setSuccessPayout] = useState(null);
 
   const load = () => {
     setLoading(true);
-    setError("");
+    setStatus({ type: "", message: "" });
     listPayableBarbersToday(token)
       .then(setPayouts)
-      .catch((err) => setError(err.message))
+      .catch((err) => setStatus({ type: "error", message: err.message }))
       .finally(() => setLoading(false));
   };
 
@@ -27,13 +27,14 @@ const PayableBarbers = () => {
 
   const handlePay = async (barberId) => {
     setPayingId(barberId);
+    setStatus({ type: "", message: "" });
     try {
       const result = await payBarberNow(token, barberId);
       setSuccessPayout(result);
       console.log("Payment successful:", result);
       load();
     } catch (err) {
-      setError(err.message);
+      setStatus({ type: "error", message: err.message })
     } finally {
       setPayingId(null);
     }
@@ -44,10 +45,23 @@ const PayableBarbers = () => {
       <h2 className={styles.title}>Payable Barbers</h2>
       <p className={styles.hint}>Barbers whose payment day is today.</p>
 
-      {loading && <p className={styles.hint}>Loading…</p>}
-      {error && <p className={styles.error}>{error}</p>}
-
-      {!loading && !error && payouts.length === 0 && (
+      {loading && (
+          <div className={styles.loadingWrap}>
+            <span className={styles.spinner} aria-hidden="true" />
+            <span className={styles.hint}>Loading Payable Barber</span>
+          </div>
+        )}
+        {status.message && (
+          <div
+            key={status.message}
+            className={`${styles.toast} ${
+                status.type === "error" ? styles.toastError : styles.toastSuccess
+              }`}
+            >
+              {status.message}
+            </div>
+        )}
+      {!loading && status.type !== "error" && payouts.length === 0 && (
         <p className={styles.hint}>No barbers are due for payout today.</p>
       )}
 

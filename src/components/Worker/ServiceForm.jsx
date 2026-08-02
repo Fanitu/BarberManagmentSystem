@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "../context/AuthContext";
-import { listBarbers } from "../api/barbers";
-import { listServices, submitServiceLog } from "../api/services";
+import { useAuth } from "../../context/AuthContext";
+import { listBarbers } from "../../api/barbers";
+import { listServices, submitServiceLog } from "../../api/services";
 import styles from "./ServiceForm.module.css";
 
 const ServiceForm = () => {
@@ -23,6 +23,12 @@ const ServiceForm = () => {
       .catch((err) => setStatus({ type: "error", message: err.message }));
   }, [token]);
 
+  useEffect(() => {
+    if (!status.message) return;
+    const timer = setTimeout(() => setStatus({ type: "", message: "" }), 3500);
+    return () => clearTimeout(timer);
+  }, [status.message, status.type]);
+
   // Pre-fill price with the catalog price when a service is chosen.
   const handleServiceChange = (id) => {
     setServiceId(id);
@@ -40,7 +46,7 @@ const ServiceForm = () => {
         serviceId,
         price: Number(price),
       });
-      setStatus({ type: "success", message: "Service submitted." });
+      setStatus({ type: "success", message: "Service submitted Successfully." });
       setBarberId("");
       setServiceId("");
       setPrice("");
@@ -54,12 +60,6 @@ const ServiceForm = () => {
   return (
     <section className={styles.section}>
       <h2 className={styles.title}>Service</h2>
-
-       {status.message && (
-          <p className={status.type === "error" ? styles.error : styles.success}>
-            {status.message}
-          </p>
-        )}
 
       <form onSubmit={handleSubmit} className={styles.form}>
         <label className={styles.label}>
@@ -116,6 +116,17 @@ const ServiceForm = () => {
           {submitting ? "Submitting…" : "Submit Service"}
         </button>
       </form>
+
+       {status.message && (
+       <div
+         key={status.message}
+         className={`${styles.toast} ${
+              status.type === "error" ? styles.toastError : styles.toastSuccess
+            }`}
+          >
+            {status.message}
+          </div>
+        )}
     </section>
   );
 };
