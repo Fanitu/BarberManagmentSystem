@@ -221,8 +221,27 @@ const RevenueView = () => {
 
                     {detail.data && (
                       <>
+                                                {period !== "daily" && (
+                            <div className={styles.detailBlock}>
+                              <h4 className={styles.detailHeading}>Barbers Performance</h4>
+                              {detail.data.barbers.length === 0 ? (
+                                <p className={styles.hint}>No services recorded.</p>
+                              ) : (
+                                <ul className={styles.detailList}>
+                                  {detail.data.barbers.map((b) => (
+                                    <li key={b.name} className={styles.detailRow}>
+                                      <span>
+                                          {b.name} — {b.count} service{b.count === 1 ? "" : "s"}
+                                          </span>
+                                      <span className="mono-figure">{formatMoney(b.cut)} Birr</span>
+                                    </li>
+                                  ))}
+                                </ul>
+                              )}
+                            </div>
+                          )}
 
-                      
+
                         <div className={styles.detailBlock}>
                           <h4 className={styles.detailHeading}>Services</h4>
                           {detail.data.services.length === 0 ? (
