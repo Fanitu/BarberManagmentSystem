@@ -29,7 +29,7 @@ function App() {
     loggingIn,
     clearLoginError,
   } = useAuth();
-  const [modalOpen, setModalOpen] = useState(true);
+  const [modalOpen, setModalOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeView, setActiveView] = useState(null);
 

@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
+import {generateMonthlyPDF} from "../../utils/generateMonthlyPDF";
 import { useAuth } from "../../context/AuthContext";
 import {
   getRevenueHistory,
   getDailyDetail,
   getWeeklyDetail,
   getMonthlyDetail,
+  getMonthlyBarberPerformance,
 } from "../../api/revenue";
 import styles from "./RevenueView.module.css";
 
@@ -29,7 +31,7 @@ const DETAIL_FETCHERS = {
   monthly: getMonthlyDetail,
 };
 
-const formatMoney = (n) =>
+export const formatMoney = (n) =>
   (n ?? 0).toLocaleString(undefined, { maximumFractionDigits: 2 });
 
 // "Wednesday, 22 Jul 2026"
@@ -65,7 +67,7 @@ const getEntryLabel = (period, entry) =>
     : formatRangeLabel(entry.start, entry.end);
 
 const RevenueView = () => {
-  const { token } = useAuth();
+  const { token,user,barberShop } = useAuth();
   const [period, setPeriod] = useState("daily");
   const [limit, setLimit] = useState(DEFAULT_LIMITS.daily);
   const [entries, setEntries] = useState([]);
@@ -81,6 +83,20 @@ const RevenueView = () => {
     setLimit(DEFAULT_LIMITS[id]);
     setDetails({}); // different period -> old expanded details no longer apply
   };
+
+
+  const handleDownloadPDF = async (entry, detail) => {
+  const barberShopName = barberShop?.name || "Our";
+  
+  setStatus({ type: "info", message: "Generating PDF..." });
+  
+  try {
+    await generateMonthlyPDF(entry, detail, barberShopName, token);
+    setStatus({ type: "success", message: "PDF downloaded successfully!" });
+  } catch (err) {
+    setStatus({ type: "error", message: "Failed to generate PDF: " + err.message });
+  }
+};
 
   useEffect(() => {
     setLoading(true);
@@ -210,9 +226,21 @@ const RevenueView = () => {
                   )}
                 </div>
 
-                <button className={styles.detailBtn} onClick={() => toggleDetail(entry)}>
-                  {detail?.open ? "Hide" : DETAIL_BUTTON_LABEL[period]}
-                </button>
+                <div className={styles.buttonGroup}>
+                  <button className={styles.detailBtn} onClick={() => toggleDetail(entry)}>
+                    {detail?.open ? "Hide" : DETAIL_BUTTON_LABEL[period]}
+                  </button>
+
+                  {period === "monthly" && (
+                    <button
+                      className={`${styles.detailBtn} ${styles.pdfBtn}`}
+                      onClick={() => handleDownloadPDF(entry, detail)}
+                      disabled={detail?.loading}
+                    >
+                      📥 Download PDF
+                    </button>
+                  )}
+                </div>
 
                 {detail?.open && (
                   <div className={styles.detailPanel}>
@@ -221,7 +249,7 @@ const RevenueView = () => {
 
                     {detail.data && (
                       <>
-                                                {period !== "daily" && (
+                         {period !== "daily" && (
                             <div className={styles.detailBlock}>
                               <h4 className={styles.detailHeading}>Barbers Performance</h4>
                               {detail.data.barbers.length === 0 ? (

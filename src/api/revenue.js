@@ -18,3 +18,6 @@ export const getWeeklyDetail = (token, date) =>
 
 export const getMonthlyDetail = (token, date) =>
   request(`/revenue/monthly-detail?date=${encodeURIComponent(date)}`, { token });
+
+export const getMonthlyBarberPerformance = (token, date) =>
+  request(`/revenue/monthly-barber-performance?date=${encodeURIComponent(date)}`, { token });
