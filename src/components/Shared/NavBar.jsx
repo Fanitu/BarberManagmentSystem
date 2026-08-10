@@ -8,7 +8,7 @@ const WORKER_TABS = [
 
 const ADMIN_TABS = [
   { id: "revenue", label: "Revenue" },
-  { id: "payable-barbers", label: "Payable Barbers" },
+  { id: "payable-barbers", label: "ዝኽፈል ባርበር" },
   { id: "running-cost", label: "Running-cost" },
 ];
 

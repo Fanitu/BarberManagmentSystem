@@ -1,35 +1,40 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { login as loginRequest } from "../api/auth";
+import { login as loginRequest, logout as logoutRequest, getCurrentUser } from "../api/auth";
 
 const AuthContext = createContext(null);
-const STORAGE_KEY = "bms-session";
 
 export const AuthProvider = ({ children }) => {
-  const [session, setSession] = useState(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      return raw ? JSON.parse(raw) : null;
-    } catch {
-      return null;
-    }
-  });
+  const [user, setUser] = useState(null);
+  const [barberShop, setBarberShop] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [loginError, setLoginError] = useState("");
   const [loggingIn, setLoggingIn] = useState(false);
 
   useEffect(() => {
-    if (session) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
-    } else {
-      localStorage.removeItem(STORAGE_KEY);
+    checkAuth();
+  }, []);
+
+  const checkAuth = async () => {
+    try {
+      const data = await getCurrentUser();
+      setUser(data.user);
+      setBarberShop(data.barberShop || null);
+    } catch (err) {
+      // Not authenticated - this is normal
+      setUser(null);
+      setBarberShop(null);
+    } finally {
+      setLoading(false);
     }
-  }, [session]);
+  };
 
   const login = async ({ name, password, barberCode }) => {
     setLoggingIn(true);
     setLoginError("");
     try {
       const data = await loginRequest({ name, password, barberCode });
-      setSession(data);
+      setUser(data.user);
+      setBarberShop(data.barberShop || null);
       return data;
     } catch (err) {
       setLoginError(err.message);
@@ -39,16 +44,29 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = () => setSession(null);
+  const logout = async () => {
+    try {
+      await logoutRequest();
+    } catch (err) {
+      console.error('Logout error:', err);
+    } finally {
+      setUser(null);
+      setBarberShop(null);
+    }
+  };
+
+  if (loading) {
+    return <div>Loading...</div>; // Or your custom loading component
+  }
 
   return (
     <AuthContext.Provider
       value={{
-        token: session?.token,
-        user: session?.user,
-        role: session?.user?.role, // 'worker' | 'admin'
-        barberShop: session?.barberShop,
-        isAuthenticated: Boolean(session?.token),
+        token: undefined, // No longer stored in JS
+        user: user,
+        role: user?.role,
+        barberShop,
+        isAuthenticated: Boolean(user),
         login,
         logout,
         loginError,
