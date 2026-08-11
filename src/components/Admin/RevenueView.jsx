@@ -110,11 +110,22 @@ const RevenueView = () => {
       .finally(() => setLoading(false));
   }, [token, period, limit]);
 
-  useEffect(() => {
+
+/*   useEffect(() => {
+      if (status.message) {
+        const timer = setTimeout(() => {
+           setStatus({  type: "", message: ""});
+        }, 4000); // 4 seconds
+        
+        return () => clearTimeout(timer);
+      }
+    }, [status.message]); */
+
+   useEffect(() => {
     if (!status.message) return;
     const timer = setTimeout(() => setStatus({ type: "", message: "" }), 3500);
     return () => clearTimeout(timer);
-  }, [status.message, status.type]);
+  }, [status.message, status.type]); 
 
   const toggleDetail = async (entry) => {
     const key = entry.start;
@@ -139,6 +150,10 @@ const RevenueView = () => {
       }));
     }
   };
+
+  console.log('Status', status);
+  console.log('Status Message', status.message);
+  console.log('Loading', loading);
 
   return (
     <section className={styles.section}>
@@ -353,15 +368,16 @@ const RevenueView = () => {
       )}
 
       {status.message && (
-        <div
-          key={status.message}
-          className={`${styles.toast} ${
-              status.type === "error" ? styles.toastError : styles.toastSuccess
-            }`}
-          >
-            {status.message}
-          </div>
-      )}
+  <div
+    key={status.message}
+    className={`${styles.toast} ${
+      status.type === "error" ? styles.toastError : styles.toastSuccess
+    }`}
+    role="alert"
+  >
+    <span>{status.message}</span>
+  </div>
+)}
     </section>
   );
 };
