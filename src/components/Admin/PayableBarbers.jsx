@@ -42,7 +42,7 @@ const PayableBarbers = () => {
 
   return (
     <section className={styles.section}>
-      <h2 className={styles.title}>ዝኽፈል ባርበር</h2>
+      <h2 className={styles.title}>Today Payable Barber</h2>
       <p className={styles.hint}>Barbers whose payment day is today.</p>
 
       {loading && (
