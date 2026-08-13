@@ -151,10 +151,7 @@ const RevenueView = () => {
     }
   };
 
-  console.log('Status', status);
-  console.log('Status Message', status.message);
-  console.log('Loading', loading);
-
+  
   return (
     <section className={styles.section}>
       <h2 className={styles.title}>Revenue</h2>
