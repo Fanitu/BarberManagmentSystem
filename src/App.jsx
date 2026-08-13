@@ -29,11 +29,15 @@ function App() {
     loggingIn,
     clearLoginError,
   } = useAuth();
+  
   const [modalOpen, setModalOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeView, setActiveView] = useState(null);
+  
+  // ✅ NEW: Track auth loading state
+  const [authLoading, setAuthLoading] = useState(true);
 
-  // Land on the right default tab as soon as we know the role.
+  // ✅ Land on the right default tab as soon as we know the role.
   useEffect(() => {
     if (role && !activeView) {
       setActiveView(DEFAULT_VIEW[role]);
@@ -41,6 +45,24 @@ function App() {
     if (!isAuthenticated) {
       setActiveView(null);
     }
+    
+    // ✅ Auth check is complete
+    setAuthLoading(false);
+    
+    // ✅ Hide loading screen after auth check
+    const hideLoader = () => {
+      const loader = document.getElementById('loading-screen');
+      if (loader) {
+        loader.classList.add('hidden');
+        setTimeout(() => {
+          loader.classList.add('removed');
+        }, 700);
+      }
+    };
+    
+    // Small delay to ensure DOM is ready
+    setTimeout(hideLoader, 200);
+    
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [role, isAuthenticated]);
 
@@ -52,11 +74,25 @@ function App() {
     }
   };
 
-
   const closeModal = () => {
     setModalOpen(false);
     clearLoginError();
   };
+
+  // ✅ Show nothing while auth is loading (prevents flash)
+  if (authLoading) {
+    return (
+      <div style={{ 
+        minHeight: '100vh', 
+        background: '#f6f1e7',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}>
+        {/* Loading screen is already showing, just keep background matching */}
+      </div>
+    );
+  }
 
   return (
     <div className="app">
