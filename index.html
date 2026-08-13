@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Barber Management System</title>
     
-    <!-- Preconnect for faster loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -13,13 +12,7 @@
       rel="stylesheet"
     />
     
-    <!-- ✅ LOADING SCREEN - Matching your ledger theme -->
     <style>
-      /* ============================================
-         DESIGN DIRECTION: "THE LEDGER"
-         Matching your tokens.css exactly
-         ============================================ */
-
       /* Reset */
       * {
         margin: 0;
@@ -27,7 +20,7 @@
         box-sizing: border-box;
       }
 
-      /* Base styles matching your theme */
+      /* Base styles */
       html, body, #root {
         height: 100%;
         margin: 0;
@@ -35,20 +28,17 @@
       }
 
       body {
-        background: #f6f1e7; /* Your --paper color */
-        color: #1f2a24; /* Your --ink color */
+        background: #f6f1e7;
+        color: #1f2a24;
         font-family: "Inter", system-ui, sans-serif;
         -webkit-font-smoothing: antialiased;
       }
 
-      /* ============================================
-         LOADING SCREEN - LEDGER THEME
-         ============================================ */
-
+      /* Loading Screen */
       #loading-screen {
         position: fixed;
         inset: 0;
-        background: #f6f1e7; /* --paper */
+        background: #f6f1e7;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -60,7 +50,6 @@
         padding: 20px;
       }
 
-      /* Completely remove from DOM when done */
       #loading-screen.removed {
         display: none !important;
       }
@@ -71,16 +60,12 @@
         pointer-events: none;
       }
 
-      /* ============================================
-         LEDGER-INSPIRED LOADING ELEMENTS
-         ============================================ */
-
-      /* Receipt tape border effect */
+      /* Receipt tape border */
       #loading-screen::before {
         content: '';
         position: absolute;
         inset: 20px;
-        border: 1px solid #d8cfba; /* --line */
+        border: 1px solid #d8cfba;
         pointer-events: none;
         opacity: 0.5;
       }
@@ -94,16 +79,15 @@
         font-family: "IBM Plex Mono", monospace;
         font-size: 10px;
         letter-spacing: 3px;
-        color: #5b6b60; /* --ink-soft */
+        color: #5b6b60;
         opacity: 0.3;
         text-transform: uppercase;
       }
 
-      /* Header line - like a receipt header */
       .loader-header {
         width: 280px;
         max-width: 90%;
-        border-bottom: 2px solid #d8cfba; /* --line */
+        border-bottom: 2px solid #d8cfba;
         padding-bottom: 16px;
         margin-bottom: 24px;
         text-align: center;
@@ -116,15 +100,14 @@
         bottom: -10px;
         left: 50%;
         transform: translateX(-50%);
-        background: #f6f1e7; /* --paper */
+        background: #f6f1e7;
         padding: 0 12px;
         font-size: 10px;
         letter-spacing: 4px;
-        color: #b8862e; /* --brass */
+        color: #b8862e;
         opacity: 0.6;
       }
 
-      /* Spinner - inspired by cash register */
       .loader-spinner {
         position: relative;
         width: 80px;
@@ -132,20 +115,18 @@
         margin-bottom: 24px;
       }
 
-      /* Register ring - green like money */
       .loader-spinner .ring {
         width: 100%;
         height: 100%;
         border-radius: 50%;
-        border: 3px solid #d8cfba; /* --line */
-        border-top-color: #1b5e3f; /* --register-green */
-        border-right-color: #b8862e; /* --brass */
-        border-bottom-color: #1b5e3f; /* --register-green */
-        border-left-color: #a13d2c; /* --debt-red */
+        border: 3px solid #d8cfba;
+        border-top-color: #1b5e3f;
+        border-right-color: #b8862e;
+        border-bottom-color: #1b5e3f;
+        border-left-color: #a13d2c;
         animation: spin 1s cubic-bezier(0.65, 0, 0.35, 1) infinite;
       }
 
-      /* Scissors in center */
       .loader-spinner .icon {
         position: absolute;
         top: 50%;
@@ -171,35 +152,32 @@
         }
       }
 
-      /* Title - using your display font */
       .loader-title {
         font-family: "Roboto Slab", "Georgia", serif;
         font-size: 28px;
         font-weight: 700;
-        color: #1f2a24; /* --ink */
+        color: #1f2a24;
         letter-spacing: 0.5px;
         margin-bottom: 4px;
       }
 
       .loader-title .highlight {
-        color: #1b5e3f; /* --register-green */
+        color: #1b5e3f;
       }
 
-      /* Subtitle - receipt style */
       .loader-subtitle {
         font-family: "IBM Plex Mono", monospace;
         font-size: 13px;
-        color: #5b6b60; /* --ink-soft */
+        color: #5b6b60;
         letter-spacing: 1px;
         font-variant-numeric: tabular-nums;
       }
 
-      /* Progress bar - like a receipt tape */
       .loader-progress-container {
         width: 240px;
         max-width: 80%;
         height: 2px;
-        background: #d8cfba; /* --line */
+        background: #d8cfba;
         border-radius: 2px;
         margin-top: 28px;
         overflow: hidden;
@@ -209,13 +187,12 @@
       .loader-progress-bar {
         height: 100%;
         width: 0%;
-        background: #1b5e3f; /* --register-green */
+        background: #1b5e3f;
         border-radius: 2px;
         animation: loadProgress 2.5s ease-in-out infinite;
         position: relative;
       }
 
-      /* Shimmer effect - cash register glow */
       .loader-progress-bar::after {
         content: '';
         position: absolute;
@@ -242,7 +219,6 @@
         100% { transform: translateX(100%); }
       }
 
-      /* Loading dots - ledger style */
       .loader-dots {
         display: inline-flex;
         gap: 4px;
@@ -254,7 +230,7 @@
         width: 4px;
         height: 4px;
         border-radius: 50%;
-        background: #b8862e; /* --brass */
+        background: #b8862e;
         animation: dotBounce 1.4s ease-in-out infinite;
       }
 
@@ -276,7 +252,6 @@
         }
       }
 
-      /* Version - like a receipt footer */
       .loader-version {
         position: absolute;
         bottom: 30px;
@@ -284,25 +259,20 @@
         transform: translateX(-50%);
         font-family: "IBM Plex Mono", monospace;
         font-size: 10px;
-        color: #5b6b60; /* --ink-soft */
+        color: #5b6b60;
         opacity: 0.2;
         letter-spacing: 2px;
         text-transform: uppercase;
       }
 
-      /* Decorative elements - receipt style */
       .loader-decor {
         font-family: "IBM Plex Mono", monospace;
         font-size: 10px;
-        color: #d8cfba; /* --line */
+        color: #d8cfba;
         letter-spacing: 2px;
         margin-top: 20px;
         opacity: 0.5;
       }
-
-      /* ============================================
-         RESPONSIVE
-         ============================================ */
 
       @media (max-width: 640px) {
         #loading-screen::before {
@@ -357,10 +327,6 @@
         }
       }
 
-      /* ============================================
-         REDUCED MOTION
-         ============================================ */
-
       @media (prefers-reduced-motion: reduce) {
         #loading-screen * {
           animation-duration: 0.01ms !important;
@@ -370,10 +336,8 @@
     </style>
   </head>
   <body>
-    <!-- ✅ LOADING SCREEN - LEDGER THEME -->
+    <!-- Loading Screen -->
     <div id="loading-screen" role="status" aria-label="Loading barber ledger">
-      
-      <!-- Receipt-style header -->
       <div class="loader-header">
         <div class="loader-title">
           <span class="highlight">✂️</span> Barber
@@ -388,27 +352,22 @@
         </div>
       </div>
 
-      <!-- Spinner -->
       <div class="loader-spinner">
         <div class="ring"></div>
         <div class="icon" aria-hidden="true">✂️</div>
       </div>
 
-      <!-- Progress -->
       <div class="loader-progress-container" aria-hidden="true">
         <div class="loader-progress-bar"></div>
       </div>
 
-      <!-- Decorative footer -->
       <div class="loader-decor">— — — — —</div>
-      
       <div class="loader-version">v2.0.0</div>
     </div>
 
-    <!-- React App Mount Point -->
     <div id="root"></div>
 
-    <!-- ✅ Loading Screen Controller -->
+    <!-- ✅ Simple loading controller - will be overridden by App.jsx -->
     <script>
       (function() {
         'use strict';
@@ -416,54 +375,29 @@
         const loadingScreen = document.getElementById('loading-screen');
         let isHidden = false;
 
-        // Hide loading screen function
         function hideLoadingScreen() {
           if (isHidden || !loadingScreen) return;
           
           loadingScreen.classList.add('hidden');
           isHidden = true;
           
-          // Completely remove after animation
           setTimeout(() => {
             if (loadingScreen && loadingScreen.parentNode) {
               loadingScreen.classList.add('removed');
-              // Optional: Completely remove from DOM
-              // loadingScreen.parentNode.removeChild(loadingScreen);
             }
           }, 700);
         }
 
-        // Expose globally for React
         window.__hideLoadingScreen = hideLoadingScreen;
 
-        // Multiple hide strategies
-        window.addEventListener('load', function() {
-          setTimeout(hideLoadingScreen, 500);
-        });
+        // ⚡ Fallback: Hide after 6 seconds max
+        setTimeout(hideLoadingScreen, 6000);
 
-        if (document.readyState === 'complete' || document.readyState === 'interactive') {
-          setTimeout(hideLoadingScreen, 300);
-        }
-
-        // Ultimate fallback
-        setTimeout(hideLoadingScreen, 4000);
-
-        // Hide on user interaction
-        const events = ['click', 'touchstart', 'keydown', 'scroll'];
-        function onUserInteraction() {
-          hideLoadingScreen();
-          events.forEach(event => {
-            document.removeEventListener(event, onUserInteraction);
-          });
-        }
-        events.forEach(event => {
-          document.addEventListener(event, onUserInteraction, { once: true, passive: true });
-        });
-
+        console.log('✂️ Barber Ledger - Loading screen ready');
+        console.log('⏱️ Will be hidden by App.jsx after auth check');
       })();
     </script>
 
-    <!-- Your Main Script -->
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
