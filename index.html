@@ -4,14 +4,375 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Barber Management System</title>
+    
+    <!-- Preconnect for faster loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Roboto+Slab:wght@500;700&display=swap"
       rel="stylesheet"
     />
+    
+    <!-- ✅ PROFESSIONAL LOADING SCREEN -->
+    <style>
+      /* Reset */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      /* Loading Screen Container */
+      #loading-screen {
+        position: fixed;
+        inset: 0;
+        background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 99999;
+        font-family: 'Inter', sans-serif;
+        transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1), 
+                    visibility 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      #loading-screen.hidden {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+      }
+
+      /* Spinner Container */
+      .loader-spinner {
+        position: relative;
+        width: 100px;
+        height: 100px;
+        margin-bottom: 32px;
+      }
+
+      /* Barber Pole Ring */
+      .loader-spinner .ring {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        border: 4px solid transparent;
+        border-top-color: #ff6b6b;
+        border-right-color: #ffd93d;
+        border-bottom-color: #6bcb77;
+        border-left-color: #4d96ff;
+        animation: spin 0.9s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+        box-shadow: 0 0 40px rgba(255, 107, 107, 0.1);
+      }
+
+      /* Scissors Icon in Center */
+      .loader-spinner .icon {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 38px;
+        animation: pulse 1.5s ease-in-out infinite;
+        filter: drop-shadow(0 0 20px rgba(255, 107, 107, 0.3));
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: translate(-50%, -50%) scale(1);
+        }
+        50% {
+          transform: translate(-50%, -50%) scale(1.12);
+        }
+      }
+
+      /* Title */
+      .loader-title {
+        color: #ffffff;
+        font-size: 34px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        margin-bottom: 6px;
+        background: linear-gradient(90deg, #ff6b6b, #ffd93d, #6bcb77, #4d96ff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        background-size: 300% 100%;
+        animation: gradientMove 3s ease infinite;
+      }
+
+      @keyframes gradientMove {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      .loader-subtitle {
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 15px;
+        font-weight: 400;
+        letter-spacing: 0.5px;
+        margin-top: 2px;
+      }
+
+      /* Progress Bar */
+      .loader-progress-container {
+        width: 280px;
+        height: 3px;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 4px;
+        margin-top: 28px;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .loader-progress-bar {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, #ff6b6b, #ffd93d, #6bcb77, #4d96ff);
+        border-radius: 4px;
+        animation: loadProgress 2.8s ease-in-out infinite;
+        position: relative;
+        background-size: 200% 100%;
+      }
+
+      /* Shimmer Effect */
+      .loader-progress-bar::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(90deg, 
+          transparent, 
+          rgba(255, 255, 255, 0.2), 
+          transparent
+        );
+        animation: shimmer 1.8s ease-in-out infinite;
+      }
+
+      @keyframes loadProgress {
+        0% {
+          width: 0%;
+        }
+        50% {
+          width: 70%;
+        }
+        100% {
+          width: 100%;
+        }
+      }
+
+      @keyframes shimmer {
+        0% {
+          transform: translateX(-100%);
+        }
+        100% {
+          transform: translateX(100%);
+        }
+      }
+
+      /* Loading Dots */
+      .loader-dots {
+        display: inline-flex;
+        gap: 5px;
+        margin-left: 6px;
+        vertical-align: middle;
+      }
+
+      .loader-dots span {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        animation: dotBounce 1.4s ease-in-out infinite;
+      }
+
+      .loader-dots span:nth-child(1) {
+        background: #ff6b6b;
+        animation-delay: 0s;
+      }
+      .loader-dots span:nth-child(2) {
+        background: #ffd93d;
+        animation-delay: 0.2s;
+      }
+      .loader-dots span:nth-child(3) {
+        background: #6bcb77;
+        animation-delay: 0.4s;
+      }
+
+      @keyframes dotBounce {
+        0%,
+        80%,
+        100% {
+          transform: scale(0.6);
+          opacity: 0.3;
+        }
+        40% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      /* Version Tag */
+      .loader-version {
+        position: absolute;
+        bottom: 30px;
+        color: rgba(255, 255, 255, 0.15);
+        font-size: 12px;
+        font-family: 'IBM Plex Mono', monospace;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+      }
+
+      /* Responsive */
+      @media (max-width: 640px) {
+        .loader-title {
+          font-size: 26px;
+        }
+        .loader-progress-container {
+          width: 200px;
+        }
+        .loader-spinner {
+          width: 70px;
+          height: 70px;
+        }
+        .loader-spinner .icon {
+          font-size: 26px;
+        }
+        .loader-subtitle {
+          font-size: 13px;
+        }
+      }
+
+      @media (max-width: 400px) {
+        .loader-title {
+          font-size: 20px;
+        }
+        .loader-progress-container {
+          width: 160px;
+        }
+        .loader-spinner {
+          width: 56px;
+          height: 56px;
+        }
+        .loader-spinner .icon {
+          font-size: 20px;
+        }
+      }
+
+      /* Optional: Add subtle background pattern */
+      #loading-screen::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image: 
+          radial-gradient(circle at 20% 50%, rgba(255, 107, 107, 0.03) 0%, transparent 50%),
+          radial-gradient(circle at 80% 50%, rgba(77, 150, 255, 0.03) 0%, transparent 50%);
+        pointer-events: none;
+      }
+    </style>
   </head>
   <body>
+    <!-- ✅ LOADING SCREEN -->
+    <div id="loading-screen" role="status" aria-label="Loading">
+      <div class="loader-spinner">
+        <div class="ring"></div>
+        <div class="icon" aria-hidden="true">✂️</div>
+      </div>
+
+      <div class="loader-title">Barber Studio</div>
+
+      <div class="loader-subtitle">
+        Loading your grooming experience
+        <span class="loader-dots" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+      </div>
+
+      <div class="loader-progress-container" aria-hidden="true">
+        <div class="loader-progress-bar"></div>
+      </div>
+
+      <div class="loader-version">v2.0.0</div>
+    </div>
+
+    <!-- React App Mount Point -->
     <div id="root"></div>
+
+    <!-- ✅ Smart Loading Screen Controller -->
+    <script>
+      (function() {
+        'use strict';
+
+        const loadingScreen = document.getElementById('loading-screen');
+        let isHidden = false;
+
+        // Function to hide loading screen
+        function hideLoadingScreen() {
+          if (isHidden || !loadingScreen) return;
+          
+          // Add a small delay for smooth transition
+          requestAnimationFrame(() => {
+            loadingScreen.classList.add('hidden');
+            isHidden = true;
+            
+            // Remove from DOM after animation completes
+            setTimeout(() => {
+              if (loadingScreen.parentNode) {
+                // Keep in DOM but hidden (better for rehydration)
+                loadingScreen.style.display = 'none';
+              }
+            }, 800);
+          });
+        }
+
+        // Expose globally so React can call it
+        window.__hideLoadingScreen = hideLoadingScreen;
+
+        // Method 1: Hide when window loads (all assets loaded)
+        window.addEventListener('load', function() {
+          // Wait a bit to ensure React has started
+          setTimeout(hideLoadingScreen, 600);
+        });
+
+        // Method 2: Fallback - hide after 4.5 seconds max
+        setTimeout(hideLoadingScreen, 4500);
+
+        // Method 3: Hide on first user interaction (for slow networks)
+        const events = ['click', 'touchstart', 'keydown'];
+        function onUserInteraction() {
+          hideLoadingScreen();
+          events.forEach(event => {
+            document.removeEventListener(event, onUserInteraction);
+          });
+        }
+        events.forEach(event => {
+          document.addEventListener(event, onUserInteraction, { once: true, passive: true });
+        });
+
+        // Method 4: If DOM is already interactive, hide sooner
+        if (document.readyState === 'interactive' || document.readyState === 'complete') {
+          setTimeout(hideLoadingScreen, 300);
+        }
+      })();
+    </script>
+
+    <!-- Your Main Script -->
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
