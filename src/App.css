@@ -1,3 +1,28 @@
+/* Add these to the top of your App.css */
+
+/* ✅ Prevent any flash before auth loads */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #f6f1e7;
+}
+
+/* ✅ Ensure app doesn't show content before auth */
+.app {
+  min-height: 100vh;
+  background: #f6f1e7;
+}
+
+/* ✅ Hidden state for app content */
+.app-content-hidden {
+  display: none !important;
+}
+
+/* ✅ Your existing styles */
 .empty-state {
   flex: 1;
   display: flex;
