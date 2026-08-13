@@ -77,6 +77,16 @@ button {
 button {
   cursor: pointer;
 }
+/* Add to tokens.css */
+
+/* Loading screen overrides (optional) */
+.loading-screen {
+  --loader-bg: var(--paper);
+  --loader-text: var(--ink);
+  --loader-accent: var(--register-green);
+  --loader-border: var(--line);
+  --loader-mono: var(--font-mono);
+}
 
 :focus-visible {
   outline: 2px solid var(--brass);
