@@ -1,64 +1,317 @@
-# Barber Management System — Worker + Admin (merged)
+Barber Management System — Frontend
 
-One React + Vite app, one repo, role-based rendering. Replaces the
-separate `worker-frontend` and `admin-frontend` apps.
+A role-based React application for managing barber-shop operations, including services, debts, revenue, barber payouts, running costs, and monthly expenses.
 
-## Setup
+The application uses a single frontend for both Workers and Administrators. After authentication, the interface and available features are determined by the user's role.
 
-```bash
-cp .env.example .env    # point VITE_API_BASE_URL at your backend
-npm install
-npm run dev
-```
+Live Application
 
-## How the merge works
+Live Demo:
+https://barber-managment-system.vercel.app/
 
-- **One login form.** `POST /api/auth/login` takes `{ name, password,
-  barberCode }` with no role field — the backend checks Admin accounts
-  first, then Worker accounts (auto-creating a worker on first login
-  with a valid code, same as before), and returns `user.role` as
-  `"worker"` or `"admin"`.
-- **`AuthContext`** stores that role alongside the token/user/barberShop
-  and exposes it as `role`.
-- **`Header`** shows "Admin Panel" when `role === "admin"`, otherwise
-  "Barber Management System".
-- **`NavBar`** renders the Worker tabs (Service / Debt / Today's Total
-  Revenue) or the Admin tabs (Revenue / Payable Barbers / Running-cost +
-  burger) based on `role`. The burger/sidebar only exist for admins.
-- **`App.jsx`** picks the default landing tab per role
-  (`service` for workers, `revenue` for admins) and switches which set
-  of view components can render based on `role` — a worker's session
-  never even mounts the admin components, and vice versa.
+«Demo access may be restricted because this application is connected to a production backend and business data.»
 
-This is client-side role gating for UI convenience, **not** the security
-boundary — the backend still checks `req.user.role` on every admin route
-(`requireRole("admin")`), so a worker's token can't call admin endpoints
-no matter what the frontend shows.
+---
 
-## Backend change that made this possible
+Overview
 
-Added `POST /api/auth/login` (unified) to `authController.js` /
-`authRoutes.js` in the Phase 1 backend, alongside the original
-`/auth/worker/login` and `/auth/admin/login` (kept for backward
-compatibility, unused by this app).
+The Barber Management System was built to replace manual barber-shop record keeping with a centralized digital workflow.
 
-## Structure
+The frontend provides separate workspaces for:
 
-```
+- Workers / Barbers
+- Shop Administrators
+
+A single login system identifies the user's role and loads the appropriate interface.
+
+The frontend communicates with a separate REST API backend.
+
+---
+
+Key Features
+
+Role-Based Application
+
+The application uses one React application for both Worker and Admin users.
+
+Worker interface
+
+- Record completed services
+- Record customer debts
+- View today's revenue
+- Access worker-specific operational functions
+
+Admin interface
+
+- View revenue
+- Manage payable barbers
+- Manage running costs
+- Manage monthly expenses
+- Manage services
+- Manage barber information
+- Access administrative tools
+
+The frontend uses role-based rendering for the user interface, while authorization is enforced by the backend API.
+
+---
+
+Authentication & Authorization
+
+The application uses a unified login flow.
+
+The login request sends:
+
+{
+  "name": "username",
+  "password": "password",
+  "barberCode": "SHOP_CODE"
+}
+
+The backend determines whether the authenticated account is a Worker or Administrator and returns the user's role.
+
+The frontend stores the authenticated session and uses the role to determine which interface should be displayed.
+
+Security Boundary
+
+Frontend role checks are used for UI control only.
+
+The backend remains the actual authorization boundary and verifies the authenticated user's role before allowing access to protected administrative endpoints.
+
+This prevents a Worker from gaining administrative access simply by manipulating the frontend.
+
+---
+
+Application Architecture
+
 src/
-  api/          barbers, services (catalog + logs), debts, running-costs,
-                monthly-expenses, revenue, payouts, auth
-  context/      AuthContext (single session, includes role)
-  components/
-    Header, LoginModal, NavBar, Sidebar        — shared shell
-    ServiceForm, DebtForm, TodayRevenue         — worker views
-    RevenueView, PayableBarbers, RunningCostForm,
-    MonthlyExpenseSection, ServiceSection,
-    BarbersListSection                          — admin views
-```
+├── api/
+│   ├── auth
+│   ├── barbers
+│   ├── services
+│   ├── debts
+│   ├── running-costs
+│   ├── monthly-expenses
+│   ├── revenue
+│   └── payouts
+│
+├── context/
+│   └── AuthContext
+│
+├── components/
+│   ├── Header
+│   ├── LoginModal
+│   ├── NavBar
+│   ├── Sidebar
+│   │
+│   ├── Worker Views
+│   │   ├── ServiceForm
+│   │   ├── DebtForm
+│   │   └── TodayRevenue
+│   │
+│   └── Admin Views
+│       ├── RevenueView
+│       ├── PayableBarbers
+│       ├── RunningCostForm
+│       ├── MonthlyExpenseSection
+│       ├── ServiceSection
+│       └── BarbersListSection
+│
+├── App.jsx
+└── main.jsx
 
-## Not yet built
+---
 
-- Super Admin UI stays its own separate app (intentionally — see the
-  Phase 3 notes: it's a platform-operator tool, different audience,
-  and you mentioned adding a monitoring dashboard to it later).
+Worker Workflow
+
+Workers have a simplified interface focused on daily operations.
+
+Service Entry
+
+Workers can record completed services through the service workflow.
+
+Service information is submitted to the backend and becomes part of the shop's revenue and barber-payment calculations.
+
+Debt Management
+
+Workers can record customer debts and view today's debt information.
+
+Today's Revenue
+
+Workers can view the current day's revenue information without receiving access to administrative functionality.
+
+---
+
+Admin Workflow
+
+Administrators receive a broader management interface.
+
+Revenue
+
+Administrators can access revenue information and financial summaries.
+
+Payable Barbers
+
+The application provides a dedicated interface for viewing barber payouts.
+
+Administrators can review payable amounts and process barber payments.
+
+Running Costs
+
+Administrators can record and manage operational running costs.
+
+Monthly Expenses
+
+Monthly business expenses can be recorded and managed separately from daily running costs.
+
+Services
+
+Administrators can manage the shop's service information used by the application.
+
+Barbers
+
+Administrators can access barber-management functionality from the administrative interface.
+
+---
+
+Role-Based Rendering
+
+The application determines the user's role after authentication.
+
+                    Login
+                      │
+                      ▼
+                Authentication
+                      │
+             ┌────────┴────────┐
+             │                 │
+          Worker             Admin
+             │                 │
+             ▼                 ▼
+       Worker Interface   Admin Interface
+
+A Worker session does not mount the administrative components.
+
+An Admin session receives the administrative navigation and views.
+
+---
+
+Backend Integration
+
+The frontend communicates with the Barber Management System backend through REST API endpoints.
+
+Backend responsibilities include:
+
+- Authentication
+- Authorization
+- Multi-tenant data isolation
+- Service records
+- Debt records
+- Revenue calculations
+- Barber payouts
+- Running costs
+- Monthly expenses
+- Super Admin operations
+
+Backend Repository:
+https://github.com/Fanitu/BarberManagmentSystemBackend
+
+---
+
+Technology Stack
+
+Frontend
+
+- React 18
+- Vite
+- JavaScript
+- REST API integration
+- Context API
+- jsPDF
+- jsPDF AutoTable
+
+The project is configured as a Vite React application and uses jsPDF and jsPDF AutoTable for PDF-related functionality.
+
+Deployment
+
+- Vercel
+
+---
+
+Local Development
+
+1. Clone the repository
+
+git clone https://github.com/Fanitu/BarberManagmentSystem.git
+
+cd BarberManagmentSystem
+
+2. Install dependencies
+
+npm install
+
+3. Configure environment variables
+
+Create a local ".env" file containing the backend API URL.
+
+Example:
+
+VITE_API_BASE_URL=http://localhost:5000
+
+Do not commit your real ".env" file.
+
+4. Start the development server
+
+npm run dev
+
+5. Production build
+
+npm run build
+
+---
+
+Engineering Highlights
+
+- Single React application serving multiple user roles
+- Role-based UI rendering
+- Centralized authentication state
+- REST API integration
+- Separate Worker and Admin workflows
+- PDF generation support
+- Production deployment with Vercel
+- Backend-enforced authorization rather than relying only on frontend role checks
+
+---
+
+Project Structure
+
+This repository contains the frontend application only.
+
+The backend is maintained separately to keep the client and server responsibilities clearly separated.
+
+Frontend
+   │
+   │ REST API
+   ▼
+Backend
+   │
+   ▼
+MongoDB
+
+---
+
+Related Repository
+
+Barber Management System Backend
+
+https://github.com/Fanitu/BarberManagmentSystemBackend
+
+---
+
+Author
+
+Fanuel Bahta
+
+Full-Stack Web Developer
+
+Portfolio:
+https://fanu-portofoilio.vercel.app/
