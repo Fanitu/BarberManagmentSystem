@@ -9,6 +9,7 @@ import {
   getMonthlyBarberPerformance,
 } from "../../api/revenue";
 import styles from "./RevenueView.module.css";
+import { LoadingBanner,SkeletonGrid } from "../Shared/SkeletonLine";
 
 const PERIODS = [
   { id: "daily", label: "Daily" },
@@ -168,11 +169,10 @@ const RevenueView = () => {
         ))}
       </div>
 
-      {loading && (
-        <div className={styles.loadingWrap}>
-          <span className={styles.spinner} aria-hidden="true" />
-          <span className={styles.hint}>Loading revenue…</span>
-        </div>
+      {loading && (<>
+        <LoadingBanner/>
+        <SkeletonGrid/>
+        </>
       )}
 
       {!loading && status.type !== "error" && (

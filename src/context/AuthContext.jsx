@@ -33,8 +33,7 @@ export const AuthProvider = ({ children }) => {
     setLoginError("");
     try {
       const data = await loginRequest({ name, password, barberCode });
-      setUser(data.user);
-      setBarberShop(data.barberShop || null);
+      await checkAuth(); // Refresh user and barberShop after login
       return data;
     } catch (err) {
       setLoginError(err.message);
@@ -65,10 +64,12 @@ export const AuthProvider = ({ children }) => {
         token: undefined, // No longer stored in JS
         user: user,
         role: user?.role,
+        isActiveWorker: user?.role === "worker" ? user?.isActive : true,
         barberShop,
         isAuthenticated: Boolean(user),
         login,
         logout,
+        refreshAuth: checkAuth,
         loginError,
         loggingIn,
         clearLoginError: () => setLoginError(""),

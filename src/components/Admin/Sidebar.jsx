@@ -4,6 +4,7 @@ const ITEMS = [
   { id: "monthly-expense", label: "Monthly expense" },
   { id: "service", label: "Service" },
   { id: "barbers-list", label: "Barbers List" },
+  { id: "receptionists", label: "Receptionists" },
 ];
 
 const Sidebar = ({ open, onClose, active, onChange }) => {

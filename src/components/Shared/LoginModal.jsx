@@ -51,14 +51,13 @@ const LoginModal = ({ onClose, onSubmit, error, loading }) => {
           </label>
 
           <label className={styles.label}>
-            Barber Code
+            Barber Code<span className={styles.optionalHint}>(leave blank for chain admin login)</span>
             <input
               className={`${styles.input} ${styles.codeInput}`}
               type="text"
               value={barberCode}
               onChange={(e) => setBarberCode(e.target.value.toUpperCase())}
               placeholder="BS-XXXXXX"
-              required
             />
           </label>
 

@@ -1,0 +1,51 @@
+.section { padding: 24px 20px; max-width: 600px; margin: 0 auto; }
+.title { font-size: 1.5rem; margin: 0 0 16px; }
+.error { color: #a33; margin-bottom: 12px; }
+
+.card { background: #fff; border: 1px solid #e3d9c4; border-radius: 10px; padding: 18px 20px; }
+.row { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+.label { font-weight: 600; display: block; margin-bottom: 4px; }
+.description { margin: 0; font-size: 0.85rem; color: #8a8271; line-height: 1.5; }
+
+.switch {
+  flex-shrink: 0;
+  width: 46px; height: 26px;
+  background: #d8cfba;
+  border: none;
+  border-radius: 14px;
+  position: relative;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+.switch.on { background: #2f5d3a; }
+.switch:disabled { opacity: 0.7; cursor: default; }
+.knob {
+  position: absolute;
+  top: 3px; left: 3px;
+  width: 20px; height: 20px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.2s ease;
+}
+.switch.on .knob { transform: translateX(20px); }
+
+.changeBtn {
+  flex-shrink: 0;
+  padding: 9px 16px;
+  background: #2f5d3a;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.onlineBtn {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 0.8rem;
+  color: #2f5d3a;
+  font-weight: 600;
+  text-decoration: underline;
+}

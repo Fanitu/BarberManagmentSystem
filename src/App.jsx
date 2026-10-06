@@ -4,6 +4,7 @@ import Header from "./components/Shared/Header";
 import LoginModal from "./components/Shared/LoginModal";
 import NavBar from "./components/Shared/NavBar";
 import Sidebar from "./components/Admin/Sidebar";
+import ChainSidebar from "./components/ChainAdmin/ChainSidebar";
 import ServiceForm from "./components/Worker/ServiceForm";
 import DebtForm from "./components/Worker/DebtForm";
 import TodayRevenue from "./components/Worker/TodayRevenue";
@@ -13,16 +14,47 @@ import RunningCostForm from "./components/Admin/RunningCostForm";
 import MonthlyExpenseSection from "./components/Admin/MonthlyExpenseSection";
 import ServiceSection from "./components/Admin/ServiceSection";
 import BarbersListSection from "./components/Admin/BarbersListSection";
+import ReceptionistsSection from "./components/Admin/ReceptionistsSection";
+import PendingApprovalBanner from "./components/Worker/PendingApprovalBanner";
+import AdminSetupPage from "./components/AdminSetup/AdminSetupPage";
+import ChainAdminSetupPage from "./components/ChainAdmin/ChainAdminSetupPage";
+import ChainOverview from "./components/ChainAdmin/ChainAdminOverview";
+import AllShopsRevenue from "./components/ChainAdmin/AllShopsRevenue";
+import ChainPayable from "./components/ChainAdmin/ChainPayable";
+import ShopsDetailOverview from "./components/ChainAdmin/ShopsDetailOverview";
+import BarbersManagement from "./components/ChainAdmin/BarberManagment";
+import ReceptionistsManagement from "./components/ChainAdmin/ReceptionistsManagment";
+import ChainReports from "./components/ChainAdmin/Reports/ChainReports";
+import ShopsProgress from "./components/ChainAdmin/ShopsProgress";
+import Settings from "./components/ChainAdmin/Settings";
+import RunningCostSection from "./components/ChainAdmin/RunningCostSection";
+import ChainMonthlyExpense from "./components/ChainAdmin/ChainMonthlyExpense";
+import OverallProfit from "./components/ChainAdmin/OverallProfit";
+import ServiceManagement from "./components/ChainAdmin/ServicesManagement";
+import { exitShopView } from "./api/chainAdmin";
 import "./App.css";
 
 const ADMIN_NAV_VIEWS = ["revenue", "payable-barbers", "running-cost"];
-const DEFAULT_VIEW = { worker: "service", admin: "revenue" };
+const CHAIN_ADMIN_NAV_VIEWS = ["overview", "revenue", "payable", "shops-detail","reports"];
+const DEFAULT_VIEW = { worker: "service", admin: "revenue", chain_admin: "overview" };
 
 function App() {
+
+ const chainSetupMatch = window.location.pathname.match(/^\/chainadmin-setup\/(.+)$/);
+  if (chainSetupMatch) {
+    return <ChainAdminSetupPage token={chainSetupMatch[1]} />;
+  }
+
+  const setupMatch = window.location.pathname.match(/^\/admin-setup\/(.+)$/);
+  if (setupMatch) {
+    return <AdminSetupPage token={setupMatch[1]} />;
+  }
+
   const {
     user,
     role,
     isAuthenticated,
+    isActiveWorker,
     login,
     logout,
     loginError,
@@ -36,6 +68,25 @@ function App() {
   
   // ✅ NEW: Track auth loading state
   const [authLoading, setAuthLoading] = useState(true);
+
+  const [viewingAsChainAdmin, setViewingAsChainAdmin] = useState(
+    sessionStorage.getItem("chainAdminViewing") === "1"
+  );
+
+  const backToOverview = async () => {
+    await exitShopView();
+    sessionStorage.removeItem("chainAdminViewing");
+    window.location.href = "/";
+  };
+
+ const [chainShopsForModal, setChainShopsForModal] = useState([]);
+  useEffect(() => {
+    if (role === "chain_admin") {
+      import("./api/chainAdmin").then(({ listMyShops }) =>
+        listMyShops().then((data) => setChainShopsForModal(data.shops.map((s) => ({ id: s.id, name: s.name }))))
+      );
+    }
+  }, [role]);
 
   // ✅ Land on the right default tab as soon as we know the role.
   useEffect(() => {
@@ -107,7 +158,13 @@ function App() {
         <>
           <NavBar
             role={role}
-            active={role === "worker" || ADMIN_NAV_VIEWS.includes(activeView) ? activeView : null}
+            active={
+              role === "worker" ||
+              ADMIN_NAV_VIEWS.includes(activeView) ||
+              CHAIN_ADMIN_NAV_VIEWS.includes(activeView)
+                ? activeView
+                : null
+            }
             onChange={setActiveView}
             onMenuClick={() => setSidebarOpen(true)}
           />
@@ -121,12 +178,33 @@ function App() {
             />
           )}
 
+          {role === "chain_admin" && (
+            <ChainSidebar
+              open={sidebarOpen}
+              onClose={() => setSidebarOpen(false)}
+              active={activeView}
+              onChange={setActiveView}
+            />
+          )}
+
+          {viewingAsChainAdmin && role === "admin" && (
+            <button className="backToOverviewBtn" onClick={backToOverview}>
+              ← Back to All Shops Overview
+            </button>
+          )}
+
           <main>
             {role === "worker" && (
               <>
-                {activeView === "service" && <ServiceForm />}
-                {activeView === "debt" && <DebtForm />}
-                {activeView === "today-revenue" && <TodayRevenue />}
+                 {!isActiveWorker ? (
+                  <PendingApprovalBanner />
+                ) : (
+                  <>
+                    {activeView === "service" && <ServiceForm />}
+                    {activeView === "debt" && <DebtForm />}
+                    {activeView === "today-revenue" && <TodayRevenue />}
+                  </>
+                )}
               </>
             )}
 
@@ -138,8 +216,27 @@ function App() {
                 {activeView === "monthly-expense" && <MonthlyExpenseSection />}
                 {activeView === "service" && <ServiceSection />}
                 {activeView === "barbers-list" && <BarbersListSection />}
+                {activeView === "receptionists" && <ReceptionistsSection />}
               </>
             )}
+
+            {role === "chain_admin" && (
+              <>
+                {activeView === "overview" && <ChainOverview />}
+                {activeView === "revenue" && <AllShopsRevenue />}
+                {activeView === "payable" && <ChainPayable />}
+                {activeView === "shops-detail" && <ShopsDetailOverview />}
+                {activeView === "barbers" && <BarbersManagement />}
+                {activeView === "receptionists" && <ReceptionistsManagement />}
+                {activeView === "reports" && <ChainReports />}
+                {activeView === "shop-progress" && <ShopsProgress />}
+                {activeView === "settings" && <Settings />}
+                {activeView === "running-cost" && <RunningCostSection shops={chainShopsForModal}/>}
+                {activeView === "monthly-expenses" && <ChainMonthlyExpense shops={chainShopsForModal} />}
+                {activeView === "overall-profit" && <OverallProfit />}
+                {activeView === "services" && <ServiceManagement shops={chainShopsForModal} />}
+              </>
+           )}
           </main>
         </>
       ) : (

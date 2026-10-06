@@ -57,3 +57,13 @@ body {
 .loginBtn:active {
   transform: scale(0.97);
 }
+
+.backToOverviewBtn {
+  margin: 12px 20px 0;
+  padding: 8px 16px;
+  background: #fff;
+  border: 1px solid #d8cfba;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}

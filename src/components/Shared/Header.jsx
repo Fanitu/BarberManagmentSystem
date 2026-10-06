@@ -1,7 +1,10 @@
 import styles from "./Header.module.css";
 
 const Header = ({ user, role, onLoginClick, onLogout }) => {
-  const title = role === "admin" ? "Admin Panel" : "Barber Management System";
+  const title = role === "admin" ? "Admin Panel" :
+  role === "worker" ? "Worker Panel" :
+  role === "chain_admin" ? "Chain Admin Panel" :
+  "Barber Management System";
 
   return (
     <header className={styles.header}>

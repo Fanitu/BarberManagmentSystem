@@ -1,0 +1,20 @@
+.banner {
+  max-width: 420px;
+  margin: 60px auto;
+  background: #fff;
+  border: 1px solid #e3d9c4;
+  border-radius: 10px;
+  padding: 28px 24px;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  transform: translateX(-120%);
+  opacity: 0;
+  transition: transform 0.4s ease, opacity 0.4s ease;
+}
+.banner.in {
+  transform: translateX(0);
+  opacity: 1;
+}
+.icon { font-size: 2rem; margin-bottom: 10px; }
+.title { margin: 0 0 8px; font-size: 1.2rem; }
+.text { margin: 0; color: #6b6558; font-size: 0.9rem; line-height: 1.5; }

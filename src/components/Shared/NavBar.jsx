@@ -12,8 +12,16 @@ const ADMIN_TABS = [
   { id: "running-cost", label: "Running-cost" },
 ];
 
+const CHAIN_ADMIN_TABS = [
+  { id: "overview", label: "All Shops Overview" },
+  { id: "revenue", label: "All Shops Revenue" },
+  { id: "payable", label: "Payable" },
+  { id: "shops-detail", label: "Shops Graphic Overview" },
+  { id: "reports", label: "Reports" },
+];
+
 const NavBar = ({ role, active, onChange, onMenuClick }) => {
-  const tabs = role === "admin" ? ADMIN_TABS : WORKER_TABS;
+  const tabs = role === "admin" ? ADMIN_TABS: role === "chain_admin" ? CHAIN_ADMIN_TABS : WORKER_TABS;
 
   return (
     <nav className={styles.nav}>
@@ -30,7 +38,7 @@ const NavBar = ({ role, active, onChange, onMenuClick }) => {
         ))}
       </div>
 
-      {role === "admin" && (
+      {(role === "admin" || role === "chain_admin") && (
         <button className={styles.burger} onClick={onMenuClick} aria-label="Open menu">
           <span />
           <span />

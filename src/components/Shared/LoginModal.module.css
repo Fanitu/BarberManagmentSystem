@@ -95,3 +95,5 @@
 .submitBtn:not(:disabled):hover {
   opacity: 0.9;
 }
+
+.optionalHint { font-weight: 400; font-size: 0.75rem; color: #8a8271; }

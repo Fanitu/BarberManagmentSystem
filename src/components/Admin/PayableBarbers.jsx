@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { listPayableBarbersToday, payBarberNow } from "../../api/payouts";
+import {LoadingBanner,SkeletonGrid} from "../Shared/SkeletonLine";
 import PaySuccessModal from "./PaySuccessModal";
 import styles from "./PayableBarbers.module.css";
 
@@ -45,11 +46,10 @@ const PayableBarbers = () => {
       <h2 className={styles.title}>Today Payable Barber</h2>
       <p className={styles.hint}>Barbers whose payment day is today.</p>
 
-      {loading && (
-          <div className={styles.loadingWrap}>
-            <span className={styles.spinner} aria-hidden="true" />
-            <span className={styles.hint}>Loading Payable Barber</span>
-          </div>
+      {loading && (<>
+          <LoadingBanner text="Loading payable barbers…" />
+          <SkeletonGrid />
+          </>
         )}
         {status.message && (
           <div

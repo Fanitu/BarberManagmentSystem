@@ -1,0 +1,83 @@
+.section { padding: 24px 20px; max-width: 1000px; margin: 0 auto; }
+.title { font-size: 1.5rem; margin: 0 0 20px; }
+.hint { color: #8a8271; }
+.error { color: #a33; margin-bottom: 12px; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.card {
+  background: #fff;
+  border: 1px solid #e3d9c4;
+  border-radius: 10px;
+  padding: 18px 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.shopName { font-size: 1.1rem; font-weight: 700; }
+.trend { font-size: 0.85rem; font-weight: 600; padding: 3px 8px; border-radius: 12px; }
+.up { color: #2f5d3a; background: #e5f0e7; }
+.down { color: #a33; background: #f7e6e6; }
+.row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  padding: 6px 0;
+  border-bottom: 1px dashed #ece5d4;
+}
+.row:last-of-type { border-bottom: none; }
+.detailBtn {
+  width: 100%;
+  margin-top: 14px;
+  padding: 9px;
+  background: #2f5d3a;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.fixedCreateBtn {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  padding: 12px 20px;
+  background: #2f5d3a;
+  color: #fff;
+  border: none;
+  border-radius: 24px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 40;
+}
+.backdrop {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 50;
+}
+.modal {
+  background: #fff;
+  border-radius: 10px;
+  padding: 24px;
+  width: 100%;
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.input {
+  padding: 10px 12px;
+  border: 1px solid #d8cfba;
+  border-radius: 6px;
+  font-size: 1rem;
+}
