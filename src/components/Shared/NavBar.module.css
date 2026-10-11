@@ -102,6 +102,7 @@
 
 @media (max-width: 480px) {
   .tabs:has(.iconWrap) {
+    
     justify-content: flex-start;
     overflow-x: auto;
   }

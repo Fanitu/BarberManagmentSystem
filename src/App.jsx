@@ -34,6 +34,7 @@ import ServiceManagement from "./components/ChainAdmin/ServicesManagement";
 import BottomNav from "./components/ChainAdmin/BottomNav";
 import { exitShopView } from "./api/chainAdmin";
 import "./App.css";
+import { setAuthToken } from "./api/client";
 
 const ADMIN_NAV_VIEWS = ["revenue", "payable-barbers", "running-cost"];
 const CHAIN_ADMIN_NAV_VIEWS = ["overview", "revenue", "payable", "barbers","shops-progress"];
@@ -76,7 +77,8 @@ function App() {
   );
 
   const backToOverview = async () => {
-    await exitShopView();
+     const data = await exitShopView();
+     if(data.token) setAuthToken(data.token);
     sessionStorage.removeItem("chainAdminViewing");
     window.location.href = "/";
   };

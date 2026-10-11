@@ -4,6 +4,7 @@ import { formatMoney } from "../Admin/RevenueView";
 import SuccessToast from "../Shared/SuccessToast";
 import { LoadingBanner,SkeletonGrid } from "../Shared/SkeletonLine";
 import styles from "./ChainOvervie.module.css";
+import { setAuthToken } from "../../api/client";
 
 const ChainOverview = () => {
   const [shops, setShops] = useState([]);
@@ -43,7 +44,8 @@ const ChainOverview = () => {
   };
   const openShop = async (shopId) => {
     try {
-      await enterShopView(shopId);
+      const data = await enterShopView(shopId);
+      if(data.token) setAuthToken(data.token);
       sessionStorage.setItem("chainAdminViewing", "1");
       window.location.href = "/";
     } catch (err) {

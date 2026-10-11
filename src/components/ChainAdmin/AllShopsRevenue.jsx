@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getShopsRevenueOverview, enterShopView } from "../../api/chainAdmin";
+import { setAuthToken } from "../../api/client";
 import { formatMoney } from "../Admin/RevenueView";
 import { LoadingBanner, SkeletonGrid } from "../Shared/SkeletonLine";
 import styles from "./AllShopsRevenue.module.css";
@@ -26,7 +27,8 @@ const AllShopsRevenue = () => {
 
   const openShop = async (shopId) => {
     try {
-      await enterShopView(shopId);
+      const data = await enterShopView(shopId);
+      if(data.token) setAuthToken(data.token)
       sessionStorage.setItem("chainAdminViewing", "1");
       window.location.href = "/";
     } catch (err) {
