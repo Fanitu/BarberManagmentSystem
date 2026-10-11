@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:3000/api";
+const BASE_URL = "https://barbermanagmentsystembackend-production-e579.up.railway.app/api";
 
 
 let authToken = sessionStorage.getItem("authToken") || null;
