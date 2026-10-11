@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { listPayableBarbersToday, payBarberNow, listPayoutHistory, getPayoutDetail } from "../../api/chainPayout";
-import { LoadingBanner,SkeletonGrid } from "../Shared/SkeletonLine";
+import { LoadingBanner,SkeletonCard } from "../Shared/SkeletonLine";
 import PaySuccessModal from "../Admin/PaySuccessModal";
 import styles from "./ChainPayable.module.css";
 
@@ -40,7 +40,7 @@ const TodayPayable = () => {
     return (
       <div>
         <LoadingBanner text="Loading today's payables…" />
-        <SkeletonGrid count={2} lines={4} />
+        <SkeletonCard count={2} lines={4} />
       </div>
     );
   }
@@ -121,7 +121,7 @@ const PayoutHistory = () => {
     return (
       <div>
         <LoadingBanner text="Loading payout history…" />
-        <SkeletonGrid count={4} lines={3} />
+        <SkeletonCard count={4} lines={3} />
       </div>
     );
   }

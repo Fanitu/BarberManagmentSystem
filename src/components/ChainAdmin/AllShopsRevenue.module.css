@@ -1,4 +1,4 @@
-.section { padding: 24px 20px; max-width: 1100px; margin: 0 auto; }
+.section { padding: 4px 20px; max-width: 1100px; margin: 0 auto; }
 .title { font-size: 1.5rem; margin: 0 0 16px; }
 .hint { color: #8a8271; }
 .error { color: #a33; margin-bottom: 12px; }
@@ -42,4 +42,4 @@
 }
 
 .entryBlock { margin-bottom: 28px; }
-.entryLabel { font-size: 1.05rem; margin: 0 0 12px; padding-bottom: 6px; border-bottom: 2px solid #e3d9c4; }
+.entryLabel { font-size: 2.05rem; margin: 0 0 12px; padding-bottom: 6px; border-bottom: 2px solid #e3d9c4; }

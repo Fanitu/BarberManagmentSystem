@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import SuccessToast from "../Shared/SuccessToast";
-import { listAllBarbers, updateBarber, deleteBarber } from "../../api/chainStaff";
+import { listAllBarbers, updateBarber, deleteBarber,createBarberForShop } from "../../api/chainStaff";
+import CreateBarberModal from "./CreateBarberModal";
 import { LoadingBanner,SkeletonGrid,SkeletonCard } from "../Shared/SkeletonLine";
 import styles from "./StaffManagement.module.css";
 
 const WEEKDAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
-const BarbersManagement = () => {
+const BarbersManagement = ({shops}) => {
   const [groups, setGroups] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -14,6 +15,8 @@ const BarbersManagement = () => {
   const [form, setForm] = useState({ name: "", phone: "", paymentDay: 0 });
   const [saving, setSaving] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
+  const [creating, setCreating] = useState(false);
 
   const load = () => {
     setLoading(true);
@@ -42,6 +45,20 @@ const BarbersManagement = () => {
       setError(err.message);
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleCreate = async (data) => {
+    setCreating(true);
+    try {
+      await createBarberForShop(data);
+      setModalOpen(false);
+      load();
+      setSuccessMessage("Barber created successfully");
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setCreating(false);
     }
   };
 
@@ -129,6 +146,12 @@ const BarbersManagement = () => {
           </div>
         </div>
       ))}
+      <button className={styles.fixedCreateBtn} onClick={() => setModalOpen(true)}>
+        + Create Barber
+      </button>
+      {modalOpen && (
+        <CreateBarberModal shops={shops} onClose={() => setModalOpen(false)} onSubmit={handleCreate} submitting={creating} />
+      )}
     </section>
     {successMessage && <SuccessToast message={successMessage} onDone={() => setSuccessMessage("")} />}
     </>

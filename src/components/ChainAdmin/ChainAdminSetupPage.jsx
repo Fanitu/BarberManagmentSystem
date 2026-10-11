@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { acceptChainAdminInvite } from "../../api/auth";
+import {setAuthToken} from "../../api/client"
 import styles from "../AdminSetup/AdminSetupPage.module.css";
 
 const ChainAdminSetupPage = ({ token }) => {
@@ -13,7 +14,8 @@ const ChainAdminSetupPage = ({ token }) => {
     setSubmitting(true);
     setError("");
     try {
-      await acceptChainAdminInvite({ token, name, password });
+      const data = await acceptChainAdminInvite({ token, name, password });
+      if(data.token) setAuthToken(data.token);
       window.location.href = "/";
     } catch (err) {
       setError(err.message);

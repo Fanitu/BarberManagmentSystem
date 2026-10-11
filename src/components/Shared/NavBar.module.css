@@ -13,9 +13,50 @@
 
 .tabs {
   display: flex;
+  width: 100%;
   align-items: stretch;
   gap: 4px;
   overflow-x: auto;
+}
+
+.tabs:has(.iconWrap) {
+  width: 100%;
+  display: flex;
+  gap: 4px;
+  justify-content: space-evenly;
+}
+.iconWrap {
+  display: none;
+}
+.tab:has(.iconWrap) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 10px;
+  background: none;
+  color: #8a8271;
+  transition: transform 0.18s ease, color 0.18s ease;
+  flex: 1;
+  max-width: 160px;
+}
+.tab:has(.iconWrap) .iconWrap {
+  display: flex;
+}
+.tabLabel {
+  font-size: 0.68rem;
+  font-weight: 600;
+}
+.tab:has(.iconWrap).active {
+  background: rgb(28, 53, 46);
+  color:  #e4f4e8;
+  border: none;
+  transform: translateY(-3px);
+}
+.tab:has(.iconWrap).active .iconWrap {
+  transform: scale(1.08);
 }
 
 .tab {
@@ -57,4 +98,19 @@
   height: 2px;
   background: var(--ink);
   border-radius: 1px;
+}
+
+@media (max-width: 480px) {
+  .tabs:has(.iconWrap) {
+    justify-content: flex-start;
+    overflow-x: auto;
+  }
+  .tab:has(.iconWrap) {
+    flex: 0 0 auto;
+    max-width: none;
+    padding: 8px 10px;
+  }
+  .tabLabel {
+    font-size: 0.62rem;
+ }
 }

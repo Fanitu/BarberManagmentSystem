@@ -1,6 +1,7 @@
 import request from "./client";
 
 export const listAllBarbers = () => request("/chainadmin/barbers");
+export const createBarberForShop = (data) => request("/chainadmin/barbers", { method: "POST", body: data });
 export const updateBarber = (id, data) => request(`/chainadmin/barbers/${id}`, { method: "PUT", body: data });
 export const deleteBarber = (id) => request(`/chainadmin/barbers/${id}`, { method: "DELETE" });
 

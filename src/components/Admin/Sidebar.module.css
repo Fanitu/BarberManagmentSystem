@@ -68,3 +68,14 @@
   background: rgba(184, 134, 46, 0.25);
   color: var(--paper-raised);
 }
+
+.itemIcon {
+  display: inline-flex;
+  color: #8a8271;
+  display: flex; 
+  align-items: end; 
+  gap: 10px;
+}
+.item.active .itemIcon {
+  color: #2f5d3a;
+}

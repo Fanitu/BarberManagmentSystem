@@ -27,3 +27,17 @@
 .editForm { margin-top: 12px; padding-top: 12px; border-top: 1px dashed #ece5d4; display: flex; flex-direction: column; gap: 8px; }
 .input { padding: 8px 10px; border: 1px solid #d8cfba; border-radius: 6px; font-size: 0.9rem; }
 .editActions { display: flex; gap: 8px; }
+.fixedCreateBtn {
+  position: fixed;
+  bottom: 75px;
+  left: 24px;
+  padding: 12px 20px;
+  background: #2f5d3a;
+  color: #fff;
+  border: none;
+  border-radius: 24px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 40;
+}

@@ -1,7 +1,19 @@
 import styles from "./Sidebar.module.css";
 
+
+const iconProps = { viewBox: "0 0 24 24", width: "20", height: "20", fill: "none", stroke: "currentColor", strokeWidth: "2" };
+
 const ITEMS = [
-  { id: "monthly-expense", label: "Monthly expense" },
+   {
+    id: "monthly-expense",
+    label: "Monthly Expense",
+    icon: (
+      <svg {...iconProps}>
+        <rect x="3" y="4" width="18" height="17" rx="2" />
+        <path d="M3 9h18M8 2v4M16 2v4" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+   ),
+ },
   { id: "service", label: "Service" },
   { id: "barbers-list", label: "Barbers List" },
   { id: "receptionists", label: "Receptionists" },

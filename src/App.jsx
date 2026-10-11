@@ -31,12 +31,14 @@ import RunningCostSection from "./components/ChainAdmin/RunningCostSection";
 import ChainMonthlyExpense from "./components/ChainAdmin/ChainMonthlyExpense";
 import OverallProfit from "./components/ChainAdmin/OverallProfit";
 import ServiceManagement from "./components/ChainAdmin/ServicesManagement";
+import BottomNav from "./components/ChainAdmin/BottomNav";
 import { exitShopView } from "./api/chainAdmin";
 import "./App.css";
 
 const ADMIN_NAV_VIEWS = ["revenue", "payable-barbers", "running-cost"];
-const CHAIN_ADMIN_NAV_VIEWS = ["overview", "revenue", "payable", "shops-detail","reports"];
+const CHAIN_ADMIN_NAV_VIEWS = ["overview", "revenue", "payable", "barbers","shops-progress"];
 const DEFAULT_VIEW = { worker: "service", admin: "revenue", chain_admin: "overview" };
+const CHAIN_BOTTOM_NAV_VIEWS = ["shops-detail", "reports", "overall-profit", "settings"];
 
 function App() {
 
@@ -161,7 +163,8 @@ function App() {
             active={
               role === "worker" ||
               ADMIN_NAV_VIEWS.includes(activeView) ||
-              CHAIN_ADMIN_NAV_VIEWS.includes(activeView)
+             CHAIN_ADMIN_NAV_VIEWS.includes(activeView) ||
+              CHAIN_BOTTOM_NAV_VIEWS.includes(activeView)
                 ? activeView
                 : null
             }
@@ -194,6 +197,7 @@ function App() {
           )}
 
           <main>
+           <div style={{ paddingBottom: role === "chain_admin" ? "24px" : 0 }}></div>
             {role === "worker" && (
               <>
                  {!isActiveWorker ? (
@@ -226,18 +230,22 @@ function App() {
                 {activeView === "revenue" && <AllShopsRevenue />}
                 {activeView === "payable" && <ChainPayable />}
                 {activeView === "shops-detail" && <ShopsDetailOverview />}
-                {activeView === "barbers" && <BarbersManagement />}
+                {activeView === "barbers" && <BarbersManagement shops={chainShopsForModal} />}
                 {activeView === "receptionists" && <ReceptionistsManagement />}
                 {activeView === "reports" && <ChainReports />}
-                {activeView === "shop-progress" && <ShopsProgress />}
+                {activeView === "shops-progress" && <ShopsProgress />}
                 {activeView === "settings" && <Settings />}
-                {activeView === "running-cost" && <RunningCostSection shops={chainShopsForModal}/>}
-                {activeView === "monthly-expenses" && <ChainMonthlyExpense shops={chainShopsForModal} />}
+                {activeView === "running-costs" && <RunningCostSection shops={chainShopsForModal}/>}
+                {activeView === "monthly-expense" && <ChainMonthlyExpense shops={chainShopsForModal} />}
                 {activeView === "overall-profit" && <OverallProfit />}
                 {activeView === "services" && <ServiceManagement shops={chainShopsForModal} />}
               </>
            )}
+          <div/>
           </main>
+          {role === "chain_admin" && (
+           <BottomNav active={activeView} onChange={setActiveView} />
+          )}
         </>
       ) : (
         <main className="empty-state">

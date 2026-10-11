@@ -41,7 +41,6 @@ const ChainOverview = () => {
       setSubmitting(false);
     }
   };
-
   const openShop = async (shopId) => {
     try {
       await enterShopView(shopId);
@@ -67,7 +66,13 @@ const ChainOverview = () => {
               <span className={`${styles.trend} ${shop.trend === "up" ? styles.up : styles.down}`}>
                 {shop.trend === "up" ? "▲" : "▼"} {Math.abs(shop.changePercent)}%
               </span>
+              
             </div>
+            <div className={styles.row}>
+              <span>Shops Code</span>
+              <span className={styles.shopName}>{shop.barberCode}</span>
+            </div>
+            
             <div className={styles.row}>
               <span>Today's Revenue</span>
               <span className="mono-figure">{formatMoney(shop.todayRevenue)} Birr</span>

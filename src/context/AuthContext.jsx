@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { login as loginRequest, logout as logoutRequest, getCurrentUser } from "../api/auth";
+import { setAuthToken } from "../api/client"; 
 
 const AuthContext = createContext(null);
 
@@ -33,6 +34,7 @@ export const AuthProvider = ({ children }) => {
     setLoginError("");
     try {
       const data = await loginRequest({ name, password, barberCode });
+      if(data.token) setAuthToken(data.token)
       await checkAuth(); // Refresh user and barberShop after login
       return data;
     } catch (err) {
@@ -49,6 +51,7 @@ export const AuthProvider = ({ children }) => {
     } catch (err) {
       console.error('Logout error:', err);
     } finally {
+      setAuthToken(null)
       setUser(null);
       setBarberShop(null);
     }

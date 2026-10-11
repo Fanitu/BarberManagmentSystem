@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { acceptAdminInvite } from "../../api/auth";
+import { setAuthToken } from "../../api/client";
 import styles from "./AdminSetupPage.module.css";
 const AdminSetupPage = ({ token }) => {
   const [name, setName] = useState("");
@@ -13,7 +14,8 @@ const AdminSetupPage = ({ token }) => {
     setSubmitting(true);
     setError("");
     try {
-      await acceptAdminInvite({ token, name, password });
+      const data = await acceptAdminInvite({ token, name, password });
+      if(data.token) setAuthToken(data.token);
       window.location.href = "/";
     } catch (err) {
       setError(err.message);
@@ -47,3 +49,4 @@ const AdminSetupPage = ({ token }) => {
 };
 
 export default AdminSetupPage;
+

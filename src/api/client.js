@@ -1,7 +1,17 @@
 const BASE_URL = "http://localhost:3000/api";
 
+
+let authToken = sessionStorage.getItem("authToken") || null;
+
+export const setAuthToken = (token) => {
+  authToken = token;
+  if (token) sessionStorage.setItem("authToken", token);
+  else sessionStorage.removeItem("authToken");
+};
+
 const request = async (path, { method = "GET", body } = {}) => {
   const headers = { "Content-Type": "application/json" };
+  if(authToken ) headers.Authorization = `Bearer ${authToken}`;
 
   try {
     const res = await fetch(`${BASE_URL}${path}`, {
