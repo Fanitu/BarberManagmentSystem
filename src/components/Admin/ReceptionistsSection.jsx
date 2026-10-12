@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { listWorkers, activateWorker, deactivateWorker, deleteWorker } from "../../api/workers";
+import { LoadingBanner,SkeletonGrid } from "../Shared/SkeletonLine";
 import styles from "./ReceptionistsSection.module.css";
 
 const ReceptionistsSection = () => {
@@ -44,7 +45,10 @@ const ReceptionistsSection = () => {
     }
   };
 
-  if (loading) return <p className={styles.hint}>Loading…</p>;
+  if (loading) return <>
+        <LoadingBanner/>
+        <SkeletonGrid/>
+        </>;
 
   return (
     <section className={styles.section}>
