@@ -7,6 +7,7 @@ import {
   updateServiceLog,
 } from "../../api/services";
 import { listTodayDebts } from "../../api/debts";
+import { LoadingBanner,SkeletonChart } from "../../Shared/SkeletonLine";
 import styles from "./TodayRevenue.module.css";
 
 const formatMoney = (n) => n.toLocaleString(undefined, { maximumFractionDigits: 2 });
@@ -95,7 +96,7 @@ const TodayRevenue = () => {
     <section className={styles.section}>
       <h2 className={styles.title}>Today's Total Revenue</h2>
 
-      {loading && <p className={styles.hint}>Loading today's entries…</p>}
+      {loading && <> <LoadingBanner/> <SkeletonChart/> </>}
       {error && <p className={styles.error}>{error}</p>}
 
       {!loading && !error && (
