@@ -1,4 +1,4 @@
-.section { padding: 24px 20px; max-width: 1000px; margin: 0 auto; }
+.section { padding: 24px 20px 90px 20px; max-width: 1000px; margin: 0 auto; }
 .title { font-size: 1.5rem; margin: 0 0 20px; }
 .hint { color: #8a8271; }
 .error { color: #a33; margin-bottom: 12px; }
@@ -8,6 +8,7 @@
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 16px;
   margin-bottom: 20px;
+  padding-bottom: 60px;
 }
 .card {
   background: #fff;
