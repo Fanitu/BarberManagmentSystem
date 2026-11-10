@@ -1,4 +1,4 @@
-const BASE_URL = "barbermanagmentsystembackend-production-d42a26c3.up.railway.app/api";
+const BASE_URL = "https://barbermanagmentsystembackend-production-d42a26c3.up.railway.app/api";
 
 
 let authToken = sessionStorage.getItem("authToken") || null;
