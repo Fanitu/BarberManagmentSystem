@@ -7,7 +7,7 @@ import {
   updateServiceLog,
 } from "../../api/services";
 import { listTodayDebts } from "../../api/debts";
-import { LoadingBanner,SkeletonChart } from "../../Shared/SkeletonLine";
+import { LoadingBanner,SkeletonChart } from "../Shared/SkeletonLine";
 import styles from "./TodayRevenue.module.css";
 
 const formatMoney = (n) => n.toLocaleString(undefined, { maximumFractionDigits: 2 });
